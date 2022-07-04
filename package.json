@@ -2,10 +2,15 @@
 	"name": "vscode-numpy-viewer",
 	"displayName": "vscode-numpy-viewer",
 	"description": "Display (binary) .npy files in VSCode.",
-	"version": "0.0.1",
+	"publisher": "Percy",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.68.0"
 	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/haochengxia/vscode-numpy-viewer.git"
+	  },
 	"categories": [
 		"Other"
 	],
@@ -13,18 +18,18 @@
 		"onCustomEditor:numpy.preview"
 	],
 	"main": "./out/extension.js",
-	"contributes": { 
+	"contributes": {
 		"customEditors": [
-		{
-		  "viewType": "numpy.preview",
-		  "displayName": "Numpy Preview",
-		  "selector": [
 			{
-			  "filenamePattern": "*.npy"
+				"viewType": "numpy.preview",
+				"displayName": "Numpy Preview",
+				"selector": [
+					{
+						"filenamePattern": "*.npy"
+					}
+				]
 			}
-		  ]
-		}
-	  ]
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -33,6 +38,9 @@
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js"
+	},
+	"dependencies": {
+		"numpy-parser": "^1.2.3"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.2.0",
