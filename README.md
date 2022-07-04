@@ -4,6 +4,8 @@
 
 Display (binary) .npy files in VSCode.
 
+![img](https://github.com/haochengxia/vscode-numpy-viewer/blob/screenshot/screenshot%20.gif?raw=true)
+
 ## Change log
 
 Please refer to [CHANGELOG.md](./CHANGELOG.md).
