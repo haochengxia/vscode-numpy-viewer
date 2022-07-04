@@ -4,6 +4,8 @@
 
 Display (binary) .npy files in VSCode.
 
+![img](screenshot%20.gif)
+
 ## Change log
 
 Please refer to [CHANGELOG.md](./CHANGELOG.md).
