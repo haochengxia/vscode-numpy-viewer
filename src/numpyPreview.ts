@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 import * as fs from 'fs';
 import { fromArrayBuffer } from 'numpy-parser';
+import ndarray from "ndarray";
 
 import { Disposable } from './disposable';
 import { OSUtils } from './utils';
@@ -9,9 +10,34 @@ import { OSUtils } from './utils';
 type PreviewState = 'Disposed' | 'Visible' | 'Active';
 
 function loadArrayBuffer(file : string) {
-    const buffer = fs.readFileSync(file);                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-    return new Uint8Array(buffer).buffer; // only needed for node conversion
-  }
+  const buffer = fs.readFileSync(file);                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+  return new Uint8Array(buffer).buffer; // only needed for node conversion
+}
+
+function walkArr(arr : any) {
+    var d = arr.shape.length
+    if (d == 1) {
+      console.log('reach bottom');
+      var n = arr.shape[0]
+      let data : Array<Number> = arr;
+      console.log(data);
+
+    } else if (d > 1) {
+      var n = arr.shape[0]
+      var r = new Array(n)
+      for(var i=0; i<n; ++i) {
+        r[i] = walkArr(arr.pick(i))
+      }
+      return r
+    } else {
+      return []
+    }
+}
+
+function isLargerThanOne(element : any, index : any, array : any) 
+{  
+   return element > 1; 
+} 
 
 export class NumpyPreview extends Disposable {
   private _previewState: PreviewState = 'Visible';
@@ -110,10 +136,24 @@ export class NumpyPreview extends Disposable {
         console.log('NOT Windows', path);
     }
     const arrayBuffer = loadArrayBuffer(path);
-    const { data: array } = fromArrayBuffer(arrayBuffer);
-    console.log(array);
-    var content : string = array.toString();
+    const { data: array, shape: arrayShape } = fromArrayBuffer(arrayBuffer);
 
+    let tempShape : Array<Number> = arrayShape;
+    var content : string = '';
+    var realShape = tempShape.filter(isLargerThanOne);
+    var realDim = realShape.length;
+    // Create multi-dim array
+    console.log('the dim of the current array is', realDim, ' shape is', arrayShape);
+    if (realDim > 1) {
+      console.log('process multi-dimension array');
+      const multiArray = ndarray(array, arrayShape);
+      console.log(content);
+      content += walkArr(multiArray);
+      console.log(content);
+    } else {
+      content += array.toString();
+    }
+    
     // Replace , with ,\n for reading
     var re = /,/gi;
     content = content.replace(re, `,\n`);
