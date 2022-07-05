@@ -1,5 +1,8 @@
 # Numpy file viewer
 
+[![Version](https://vsmarketplacebadge.apphb.com/version/Percy.vscode-numpy-viewer.svg)](https://marketplace.visualstudio.com/items?itemName=Percy.vscode-numpy-viewer)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/Percy.vscode-numpy-viewer.svg)](https://marketplace.visualstudio.com/items?itemName=Percy.vscode-numpy-viewer)
+
 > NOT support int64 yet.
 
 Display (binary) .npy files in VSCode.
