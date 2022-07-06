@@ -13,6 +13,25 @@ function loadArrayBuffer(file : string) {
   return new Uint8Array(buffer).buffer; // only needed for node conversion
 }
 
+function wrapWithSqBr(s : string) {
+  return '[' + s + ']'
+}
+
+function multiArrayToString (array : any, shape : any) {
+  if (shape.length > 1) {
+    const pieceNum : number = shape[0];
+    const pieceSize : number = array.length / pieceNum;
+    var res = new Array(pieceNum);
+    for (var i = 0; i < pieceNum; i++) {
+      res[i] = multiArrayToString(array[i], shape.slice(1, shape.length));
+    }
+    return wrapWithSqBr(res.toString());
+  }
+  else {
+    return wrapWithSqBr(array.toString());
+  }
+}
+
 function makeTableHTML(myArray : any) {
   var result = "<table border=''>";
   for(var i=0; i<myArray.length; i++) {
@@ -186,14 +205,16 @@ export class NumpyPreview extends Disposable {
       // TODO: show multi arr in pretty format
       switch (realDim) {
         case 2:
-          content = show2DArr(multiArr);
+          const config = vscode.workspace.getConfiguration('myExtension');
+          if (config.get('tableView')) content = show2DArr(multiArr);
+          else content = multiArrayToString(multiArr, arrayShape);
           console.log(content);
           break;
         default:
-          content = array.toString();
+          content = multiArrayToString(multiArr, arrayShape);
       }
     } else {
-      content = array.toString();
+      content = multiArrayToString(multiArr, arrayShape);
     }
     
     // Replace , with ,\n for reading
@@ -205,7 +226,8 @@ export class NumpyPreview extends Disposable {
     <meta charset="utf-8">
     </head>`;
     const tail = ['</html>'].join('\n');
-    const output =  head + `<body><div id="x">` + content + `</div></body>` + tail;
+    const output =  head + `<body>              
+    <div id="x">` + content + `</div></body>` + tail;
     console.log(output);
     return output;
   }

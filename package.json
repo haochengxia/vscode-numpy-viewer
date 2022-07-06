@@ -29,8 +29,21 @@
           }
         ]
       }
-    ]
+    ],
+	"configuration": [
+		{
+			"title": "vscode-numpy-viewer",
+			"properties": {
+				"tableView": {
+					"type": "boolean",
+					"default":false,
+					"description": "Use table view to display 2D array."
+				}
+			}
+		}
+	]
   },
+
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
