@@ -197,24 +197,25 @@ export class NumpyPreview extends Disposable {
     var realDim = realShape.length;
     // Create multi-dim array
     console.log('[+] Array dim is', realDim);
+  
     if (realDim > 1) {
+      // For multi dim
       console.log('[*] Process to show structure');
-      console.log(array);
       var multiArr = toMultiDimArray(array, arrayShape);
-      console.table(multiArr);
-      // TODO: show multi arr in pretty format
-      switch (realDim) {
+      switch (arrayShape.length) {
         case 2:
           const config = vscode.workspace.getConfiguration('myExtension');
+          // TODO: import Table View for 2D array
           if (config.get('tableView')) content = show2DArr(multiArr);
           else content = multiArrayToString(multiArr, arrayShape);
-          console.log(content);
           break;
         default:
           content = multiArrayToString(multiArr, arrayShape);
       }
-    } else {
-      content = multiArrayToString(multiArr, arrayShape);
+    } 
+    else { 
+      // For single dim
+      content = wrapWithSqBr(array.toString());
     }
     
     // Replace , with ,\n for reading
@@ -228,7 +229,6 @@ export class NumpyPreview extends Disposable {
     const tail = ['</html>'].join('\n');
     const output =  head + `<body>              
     <div id="x">` + content + `</div></body>` + tail;
-    console.log(output);
     return output;
   }
 }
