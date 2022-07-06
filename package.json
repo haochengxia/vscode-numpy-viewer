@@ -1,61 +1,59 @@
 {
-	"name": "vscode-numpy-viewer",
-	"displayName": "vscode-numpy-viewer",
-	"description": "Display (binary) .npy files in VSCode.",
-	"publisher": "Percy",
-	"version": "0.0.2",
-	"engines": {
-		"vscode": "^1.68.0"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/haochengxia/vscode-numpy-viewer.git"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCustomEditor:numpy.preview"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"customEditors": [
-			{
-				"viewType": "numpy.preview",
-				"displayName": "Numpy Preview",
-				"selector": [
-					{
-						"filenamePattern": "*.npy"
-					}
-				]
-			}
-		]
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile && npm run lint",
-		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
-	},
-	"dependencies": {
-		"numpy-parser": "^1.2.3",
-		"ndarray": "^1.0.18"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.2.0",
-		"@types/mocha": "^9.1.1",
-		"@types/node": "16.x",
-		"@types/vscode": "^1.68.0",
-		"@typescript-eslint/eslint-plugin": "^5.27.0",
-		"@typescript-eslint/parser": "^5.27.0",
-		"@vscode/test-electron": "^2.1.3",
-		"eslint": "^8.16.0",
-		"glob": "^8.0.3",
-		"mocha": "^10.0.0",
-		"numpy-parser": "^1.2.3",
-		"ndarray": "^1.0.19",
-		"typescript": "^4.7.2"
-	}
+  "name": "vscode-numpy-viewer",
+  "displayName": "vscode-numpy-viewer",
+  "description": "Display (binary) .npy files in VSCode.",
+  "publisher": "Percy",
+  "version": "0.0.2",
+  "engines": {
+    "vscode": "^1.68.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/haochengxia/vscode-numpy-viewer.git"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCustomEditor:numpy.preview"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "numpy.preview",
+        "displayName": "Numpy Preview",
+        "selector": [
+          {
+            "filenamePattern": "*.npy"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "dependencies": {
+    "numpy-parser": "^1.2.3"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.68.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "@vscode/test-electron": "^2.1.3",
+    "eslint": "^8.16.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "numpy-parser": "^1.2.3",
+    "typescript": "^4.7.2"
+  }
 }

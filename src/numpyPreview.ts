@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 
 import * as fs from 'fs';
 import { fromArrayBuffer } from 'numpy-parser';
-import ndarray from "ndarray";
 
 import { Disposable } from './disposable';
 import { OSUtils } from './utils';
@@ -14,24 +13,59 @@ function loadArrayBuffer(file : string) {
   return new Uint8Array(buffer).buffer; // only needed for node conversion
 }
 
-function walkArr(arr : any) {
-    var d = arr.shape.length
-    if (d == 1) {
-      console.log('reach bottom');
-      var n = arr.shape[0]
-      let data : Array<Number> = arr;
-      console.log(data);
-
-    } else if (d > 1) {
-      var n = arr.shape[0]
-      var r = new Array(n)
-      for(var i=0; i<n; ++i) {
-        r[i] = walkArr(arr.pick(i))
-      }
-      return r
-    } else {
-      return []
+function makeTableHTML(myArray : any) {
+  var result = "<table border=''>";
+  for(var i=0; i<myArray.length; i++) {
+    result += "<tr>";
+    for(var j=0; j<myArray[i].length; j++){
+      result += "<td>"+myArray[i][j]+"</td>";
     }
+    result += "</tr>";
+  }
+  result += "</table>";
+  
+  return result;
+}
+// q = 
+// for i in [(data[0:1], 'th'), (data[1:], 'td')]:
+//     q += "\n".join(
+//         [
+//             "<tr>%s</tr>" % str(_mm) 
+//             for _mm in [
+//                 "".join(
+//                     [
+//                         "<%s>%s</%s>" % (i[1], str(_q), i[1]) 
+//                         for _q in _m
+//                     ]
+//                 ) for _m in i[0]
+//             ] 
+//         ])+"\n"
+// q += "</table>"
+// return q
+
+function show2DArr(array : any) {
+  // Show array in an table
+  // TODO: prettify it
+  const table_html = makeTableHTML(array);
+  return table_html;
+}
+
+function toMultiDimArray(array : any, shape : any) {
+  if (shape.length > 1) {
+    const pieceNum : number = shape[0];
+    const pieceSize : number = array.length / pieceNum;
+    var res = new Array(pieceNum);
+    for (var i = 0; i < pieceNum; i++) {
+      const begin = i * pieceSize;
+      const end = array.length - (pieceNum - i - 1) * pieceSize;
+      console.log(begin, end);
+      res[i] = toMultiDimArray(array.slice(begin, end), shape.slice(1, shape.length));
+    }
+    return res;
+  }
+  else {
+    return array;
+  }
 }
 
 function isLargerThanOne(element : any, index : any, array : any) 
@@ -130,10 +164,10 @@ export class NumpyPreview extends Disposable {
     switch (OSUtils.isWindows()) {
       case true: 
         path = this.resource.path.slice(1, );
-        console.log('Windows -> cut path', path);
+        console.log('[+] Windows -> cut path', path);
         break;
       default:
-        console.log('NOT Windows', path);
+        console.log('[+] NOT Windows', path);
     }
     const arrayBuffer = loadArrayBuffer(path);
     const { data: array, shape: arrayShape } = fromArrayBuffer(arrayBuffer);
@@ -143,15 +177,23 @@ export class NumpyPreview extends Disposable {
     var realShape = tempShape.filter(isLargerThanOne);
     var realDim = realShape.length;
     // Create multi-dim array
-    console.log('the dim of the current array is', realDim, ' shape is', arrayShape);
+    console.log('[+] Array dim is', realDim);
     if (realDim > 1) {
-      console.log('process multi-dimension array');
-      const multiArray = ndarray(array, arrayShape);
-      console.log(content);
-      content += walkArr(multiArray);
-      console.log(content);
+      console.log('[*] Process to show structure');
+      console.log(array);
+      var multiArr = toMultiDimArray(array, arrayShape);
+      console.table(multiArr);
+      // TODO: show multi arr in pretty format
+      switch (realDim) {
+        case 2:
+          content = show2DArr(multiArr);
+          console.log(content);
+          break;
+        default:
+          content = array.toString();
+      }
     } else {
-      content += array.toString();
+      content = array.toString();
     }
     
     // Replace , with ,\n for reading

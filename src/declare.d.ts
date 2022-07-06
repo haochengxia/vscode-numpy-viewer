@@ -1,2 +1,3 @@
 declare module 'numpy-parser';
-declare module 'ndarray';
+declare module 'table';
+declare module 'tableify';
