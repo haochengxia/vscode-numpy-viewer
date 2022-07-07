@@ -45,22 +45,6 @@ function makeTableHTML(myArray : any) {
   
   return result;
 }
-// q = 
-// for i in [(data[0:1], 'th'), (data[1:], 'td')]:
-//     q += "\n".join(
-//         [
-//             "<tr>%s</tr>" % str(_mm) 
-//             for _mm in [
-//                 "".join(
-//                     [
-//                         "<%s>%s</%s>" % (i[1], str(_q), i[1]) 
-//                         for _q in _m
-//                     ]
-//                 ) for _m in i[0]
-//             ] 
-//         ])+"\n"
-// q += "</table>"
-// return q
 
 function show2DArr(array : any) {
   // Show array in an table
