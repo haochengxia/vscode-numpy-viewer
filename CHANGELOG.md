@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.5 (2022/07/08)
+
+- Fix: configuration loading error.
+
 ## 0.0.4 (2022/07/07)
 
 - Add icon.

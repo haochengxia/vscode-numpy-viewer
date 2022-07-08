@@ -14,7 +14,7 @@ function loadArrayBuffer(file : string) {
 }
 
 function wrapWithSqBr(s : string) {
-  return '[' + s + ']'
+  return '[' + s + ']';
 }
 
 function multiArrayToString (array : any, shape : any) {
@@ -49,8 +49,8 @@ function makeTableHTML(myArray : any) {
 function show2DArr(array : any) {
   // Show array in an table
   // TODO: prettify it
-  const table_html = makeTableHTML(array);
-  return table_html;
+  const tableHTML = makeTableHTML(array);
+  return tableHTML;
 }
 
 function toMultiDimArray(array : any, shape : any) {
@@ -61,7 +61,6 @@ function toMultiDimArray(array : any, shape : any) {
     for (var i = 0; i < pieceNum; i++) {
       const begin = i * pieceSize;
       const end = array.length - (pieceNum - i - 1) * pieceSize;
-      console.log(begin, end);
       res[i] = toMultiDimArray(array.slice(begin, end), shape.slice(1, shape.length));
     }
     return res;
@@ -188,10 +187,15 @@ export class NumpyPreview extends Disposable {
       var multiArr = toMultiDimArray(array, arrayShape);
       switch (arrayShape.length) {
         case 2:
-          const config = vscode.workspace.getConfiguration('myExtension');
+          let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration();
           // TODO: import Table View for 2D array
-          if (config.get('tableView')) content = show2DArr(multiArr);
-          else content = multiArrayToString(multiArr, arrayShape);
+          if (config.get('vscode-numpy-viewer.tableView')) {
+            console.log('[*] Table view enabled, create html table');
+            content = show2DArr(multiArr);
+          }
+          else {
+            content = multiArrayToString(multiArr, arrayShape);
+          }
           break;
         default:
           content = multiArrayToString(multiArr, arrayShape);

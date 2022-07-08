@@ -3,7 +3,7 @@
   "displayName": "vscode-numpy-viewer",
   "description": "Display (binary) .npy files in VSCode.",
   "publisher": "Percy",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.68.0"
@@ -33,9 +33,9 @@
     ],
     "configuration": [
       {
-        "title": "vscode-numpy-viewer",
+        "title": "vscode-numpy-viewer configuration",
         "properties": {
-          "tableView": {
+          "vscode-numpy-viewer.tableView": {
             "type": "boolean",
             "default": false,
             "description": "Use table view to display 2D array."
