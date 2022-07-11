@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import * as fs from 'fs';
-import { fromArrayBuffer } from 'numpy-parser';
+import { fromArrayBuffer } from './numpyParser';
 
 import { Disposable } from './disposable';
 import { OSUtils } from './utils';

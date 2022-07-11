@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.6 (2022/07/11)
+
+- Feat: support Int64.
+
 ## 0.0.5 (2022/07/08)
 
 - Fix: configuration loading error.
