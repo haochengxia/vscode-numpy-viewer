@@ -13,11 +13,40 @@ function loadArrayBuffer(file : string) {
   return new Uint8Array(buffer).buffer; // only needed for node conversion
 }
 
+function toFortranAbsoluteIndex(absoluteIdx : number, shape : number[]) {
+  // e.g. to C like index  45 for shape (4, 5, 6)
+  // [1][2][3] for shape (4, 5, 6) => 1 * (1) + 2 * (1 * 4) + 3 * (1 * 5 * 4)
+
+  var res = 0;
+  var base = 1;
+
+  for (var i = 0; i < shape.length; i++) {
+    base *= shape[i];
+  }
+
+  for (var i = 0; i < shape.length; i++) {
+    // cLikeIdx.push(absoluteIdx % shape[-i]);
+    base /= shape[shape.length-1-i];
+    res += (absoluteIdx % shape[shape.length-1-i]) * base;
+    absoluteIdx = Math.floor(absoluteIdx / shape[shape.length-1-i]);
+  } 
+  return res;
+}
+
+function toCLikeArray(array : any, shape : number[]) {
+  // walk arr
+  var newArray : typeof array = [];
+  for (var i = 0; i < array.length; i++) {
+    newArray.push(array[toFortranAbsoluteIndex(i, shape)]);
+  }
+  return newArray;
+}
+
 function wrapWithSqBr(s : string) {
   return '[' + s + ']';
 }
 
-function multiArrayToString (array : any, shape : any) {
+function multiArrayToString (array : any, shape : number[]) {
   if (shape.length > 1) {
     const pieceNum : number = shape[0];
     const pieceSize : number = array.length / pieceNum;
@@ -172,22 +201,33 @@ export class NumpyPreview extends Disposable {
         console.log('[+] NOT Windows', path);
     }
     const arrayBuffer = loadArrayBuffer(path);
-    const { data: array, shape: arrayShape } = fromArrayBuffer(arrayBuffer);
-
+    var { data: array, shape: arrayShape, order: order } = fromArrayBuffer(arrayBuffer);
+    
     let tempShape : Array<Number> = arrayShape;
     var content : string = '';
     var realShape = tempShape.filter(isLargerThanOne);
     var realDim = realShape.length;
     // Create multi-dim array
+    console.log('[+] Array order is', order);
     console.log('[+] Array dim is', realDim);
   
     if (realDim > 1) {
       // For multi dim
       console.log('[*] Process to show structure');
+      let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration();
+      if (order === 'F' && config.get('vscode-numpy-viewer.fortran2CLikeOrder')) {
+        // Process to get C-like array
+        // TODO: optim performance
+        array = toCLikeArray(array, arrayShape);
+      } else {
+        // Just reverse the shape, output a transposed c-like array
+        arrayShape = arrayShape.reverse();
+      }
+
       var multiArr = toMultiDimArray(array, arrayShape);
       switch (arrayShape.length) {
         case 2:
-          let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration();
+          
           // TODO: import Table View for 2D array
           if (config.get('vscode-numpy-viewer.tableView')) {
             console.log('[*] Table view enabled, create html table');

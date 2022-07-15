@@ -1,5 +1,7 @@
 // Modified from https://github.com/ludwigschubert/js-numpy-parser/blob/master/src/main.js
 
+import { isInt32Array } from "util/types";
+
 class DataViewReader {
     offset : number = 0;
     constructor(public dataView : DataView) {
@@ -89,14 +91,17 @@ export function fromArrayBuffer(buffer : ArrayBuffer) {
     }
     const headerStr = reader.readAndASCIIDecodeBytes(headerLength);
     const header = parseHeaderStr(headerStr);
+    var order = 'C';
     if (header.fortran_order) {
-      throw new Error('NPY file is written in Fortran byte order, support for this byte order is not yet implemented.');
+      order = 'F';
+      // throw new Error('NPY file is written in Fortran byte order, support for this byte order is not yet implemented.');
     }
     // Intepret the bytes according to the specified dtype
     const constructor = typedArrayConstructorForDescription(header.descr);
     const data = new constructor(buffer, reader.offset);
+
     // Return object with same signature as NDArray expects: {data, shape}
-    return { data: data, shape: header.shape };
+    return { data: data, shape: header.shape, order: order};
   }
   
   
@@ -107,6 +112,12 @@ export function fromArrayBuffer(buffer : ArrayBuffer) {
       .replace('[,','[1,]').replace(',]',',1]') // implicit dimensions: [10,] -> [10,1]
       .replace(/'/g, '"'); // single quotes -> double quotes
     return JSON.parse(jsonHeader);
+  }
+
+
+  function toCLikeArray(data : any, shape : Array<number>) {
+    // Convert fortan like array to C like array
+
   }
   
   

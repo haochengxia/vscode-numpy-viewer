@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.7 (2022/07/15)
+
+- Feat: support Fortran order.
+
 ## 0.0.6 (2022/07/11)
 
 - Feat: support Int64.

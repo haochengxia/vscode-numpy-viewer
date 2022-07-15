@@ -3,7 +3,7 @@
   "displayName": "vscode-numpy-viewer",
   "description": "Display (binary) .npy files in VSCode.",
   "publisher": "Percy",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.68.0"
@@ -39,6 +39,11 @@
             "type": "boolean",
             "default": false,
             "description": "Use table view to display 2D array."
+          },
+          "vscode-numpy-viewer.fortran2CLikeOrder": {
+            "type": "boolean",
+            "default": true,
+            "description": "Convert fortran array to C like array otherwise just output the transposed array. e.g. [[1, 2, 3], [4, 5, 6]] if true, output is [[1, 2, 3], [4, 5, 6]], otherwise output is [[1, 4], [2, 5], [3, 6]]."
           }
         }
       }
