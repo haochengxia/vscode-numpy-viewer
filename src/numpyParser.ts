@@ -1,6 +1,8 @@
 // Modified from https://github.com/ludwigschubert/js-numpy-parser/blob/master/src/main.js
 
-import { isInt32Array } from "util/types";
+import {StringArray} from './stringArray';
+
+var stringArrEleSize = -1;
 
 class DataViewReader {
     offset : number = 0;
@@ -97,8 +99,14 @@ export function fromArrayBuffer(buffer : ArrayBuffer) {
       // throw new Error('NPY file is written in Fortran byte order, support for this byte order is not yet implemented.');
     }
     // Intepret the bytes according to the specified dtype
+    var data;
     const constructor = typedArrayConstructorForDescription(header.descr);
-    const data = new constructor(buffer, reader.offset);
+    if (constructor === String) {
+      var stringArray = new StringArray(buffer, reader.offset, stringArrEleSize);
+      data = stringArray.data;
+    } else {
+      data = new constructor(buffer, reader.offset);
+    }
 
     // Return object with same signature as NDArray expects: {data, shape}
     return { data: data, shape: header.shape, order: order};
@@ -107,18 +115,16 @@ export function fromArrayBuffer(buffer : ArrayBuffer) {
   
   function parseHeaderStr(headerStr : string) {
     const jsonHeader = headerStr
+      .replace('L', '') // string array (116L,) -> (116,)
+      .replace('U', 'str')
       .toLowerCase() // boolean literals: False -> false
       .replace('(','[').replace('),',']') // Python tuple to JS array: (10,) -> [10,]
       .replace('[,','[1,]').replace(',]',',1]') // implicit dimensions: [10,] -> [10,1]
       .replace(/'/g, '"'); // single quotes -> double quotes
+    console.log(jsonHeader);
     return JSON.parse(jsonHeader);
   }
 
-
-  function toCLikeArray(data : any, shape : Array<number>) {
-    // Convert fortan like array to C like array
-
-  }
   
   
   function typedArrayConstructorForDescription(dtypeDescription : string) {
@@ -164,6 +170,13 @@ export function fromArrayBuffer(buffer : ArrayBuffer) {
       // No support for ComplexFloating, on-number types (flexible/character/void...) yet
   
       default:
+        // check whether is string array
+        if (dtypeDescription.startsWith('<str')) {
+          const size = parseInt(dtypeDescription.slice(4));
+          console.log('[+] String Array, element size is', size);
+          stringArrEleSize = size;
+          return String;
+        }
         throw new Error('Unknown or not yet implemented numpy dtype description: ' + dtypeDescription);
     }
   }

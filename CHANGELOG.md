@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.8 (2022/07/16)
+
+- Feat: support string array (UTF-16).
+
 ## 0.0.7 (2022/07/15)
 
 - Feat: support Fortran order.

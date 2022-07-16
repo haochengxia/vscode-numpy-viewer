@@ -3,7 +3,7 @@
   "displayName": "vscode-numpy-viewer",
   "description": "Display (binary) .npy files in VSCode.",
   "publisher": "Percy",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.68.0"
