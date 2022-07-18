@@ -1,17 +1,14 @@
 import * as vscode from 'vscode';
 
-import * as fs from 'fs';
-import { fromArrayBuffer } from './numpyParser';
+
+import { fromArrayBuffer, loadArrayBuffer } from './numpyParser';
 
 import { Disposable } from './disposable';
 import { OSUtils } from './utils';
 
 type PreviewState = 'Disposed' | 'Visible' | 'Active';
 
-export function loadArrayBuffer(file : string) {
-  const buffer = fs.readFileSync(file);                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-  return new Uint8Array(buffer).buffer; // only needed for node conversion
-}
+
 
 function toFortranAbsoluteIndex(absoluteIdx : number, shape : number[]) {
   // e.g. to C like index  45 for shape (4, 5, 6)

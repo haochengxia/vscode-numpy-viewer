@@ -1,8 +1,14 @@
 // Modified from https://github.com/ludwigschubert/js-numpy-parser/blob/master/src/main.js
+import * as fs from 'fs';
 
 import {StringArray} from './type/stringArray';
 
 var stringArrEleSize = -1;
+
+export function loadArrayBuffer(file : string) {
+  const buffer = fs.readFileSync(file);                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+  return new Uint8Array(buffer).buffer; // only needed for node conversion
+}
 
 class DataViewReader {
     offset : number = 0;
@@ -121,7 +127,7 @@ export function fromArrayBuffer(buffer : ArrayBuffer) {
       .replace('(','[').replace('),',']') // Python tuple to JS array: (10,) -> [10,]
       .replace('[,','[1,]').replace(',]',',1]') // implicit dimensions: [10,] -> [10,1]
       .replace(/'/g, '"'); // single quotes -> double quotes
-    console.log(jsonHeader);
+    // console.log(jsonHeader);
     return JSON.parse(jsonHeader);
   }
 
