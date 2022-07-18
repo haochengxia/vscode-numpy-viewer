@@ -16,3 +16,4 @@ Please refer to [CHANGELOG.md](./CHANGELOG.md).
 
 - [ludwigschubert/js-numpy-parser](https://github.com/ludwigschubert/js-numpy-parser)
 - [tomoki1207/vscode-pdfviewer](https://github.com/tomoki1207/vscode-pdfviewer)
+- [janisdd/vscode-edit-csv](https://github.com/janisdd/vscode-edit-csv)

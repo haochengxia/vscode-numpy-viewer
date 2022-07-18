@@ -1,0 +1,1295 @@
+
+html {
+	--extension-options-bar-display: block;
+	--extension-side-panel-display: none;
+	--extension-side-panel-expand-icon-display: block;
+	--extension-side-panel-collapse-icon-display: none;
+
+	--warning-color-all-themes: rgb(193 166 63);
+	/* will be set before dom loaded to: inherit OR var(--vscode-editor-font-family) */
+	--extension-table-font-family: inherit;
+	--type-ramp-base-font-size: 14px;
+}
+
+html, body {
+	height: 100%;
+	/* dark  for browser*/
+	/* background-color:#003b49; */
+	/* light */
+	/* background-color: #c3b990; */
+	background-color: var(--vscode-editor-background);
+	padding: 0;
+}
+
+.page {
+	display: flex;
+	flex-direction: column;
+	padding: 0.5em;
+}
+
+.full-h {
+	height: 100%;
+}
+
+.csv-editor-wrapper {
+	overflow: hidden;
+	flex: 1;
+}
+
+#csv-editor-wrapper {
+	font-family: var(--extension-table-font-family);
+}
+
+#csv-editor {
+	overflow: hidden;
+	/*when we set the initial size small and use handsontable option renderAllRows false
+	the initial render will not hang for large data (e.g. 100 000 rows ~ 13Mb)*/
+	width: 600px;
+	height: 200px;
+}
+
+.hoverable {
+	opacity: 0.7;
+}
+
+.hoverable:hover {
+	opacity: 1;
+}
+
+.clickable {
+	opacity: 0.7;
+	cursor: pointer
+}
+
+.clickable:hover {
+	opacity: 1;
+}
+
+.unsaved-changes-indicator {
+	color: var(--warning-color-all-themes);
+	transition: opacity 0.5s ease-in-out;
+	margin-top: 3px;
+}
+
+.op-hidden {
+	opacity: 0;
+	display: none;
+	pointer-events: none;
+}
+
+#source-file-unwatched-indicator {
+	color: #dd514c;
+	margin-top: 3px;
+}
+#source-file-unwatched-indicator.tooltip.is-tooltip-left::before {
+	bottom: -37%; /* else we clip outside the viewport */
+}
+
+.dis-hidden {
+	display: none;
+}
+
+input.input {
+	width: 110px;
+}
+
+.field > label  {
+	display: block
+}
+
+.flexed {
+	display: flex
+}
+
+.mar-left {
+	margin-left: 1em;
+}
+
+.mar-left-half {
+	margin-left: 0.5em;
+}
+
+.mar-bot {
+	margin-bottom: 1em;
+}
+
+.handsontable th .remove-col,
+.handsontable th .remove-row {
+	visibility: hidden;
+}
+
+.handsontable th:hover .remove-col,
+.handsontable th:hover .remove-row {
+	visibility: visible;
+}
+.handsontable th .remove-col:hover,
+.handsontable th .remove-row:hover {
+	visibility: visible;
+	opacity: 1;
+}
+
+.remove-col,
+.remove-row {
+	margin-right: 4px; /*we need this else the sorting arrow will intersect this and causes flickering*/
+}
+
+.table-action-buttons {
+	margin: 0.5em 0;
+	position: relative;
+}
+
+.table-action-buttons .separated-btns {
+	display: flex;
+}
+
+.table-action-buttons .separated-btns > button:not(:last-child) {
+	margin-right: 5px;
+}
+
+#status-info-wrapper {
+	flex: 1;
+	display: inline-block;
+	padding: 0.3em 1em 0.3em 0.3em;
+	overflow: hidden;
+}
+
+#status-info-wrapper > div {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+#status-info {
+	white-space: nowrap;
+}
+
+#received-csv-prog-bar {
+	height: 5px;
+}
+#received-csv-prog-bar-wrapper {
+	font-display: none;
+	position: absolute;
+	left:0;
+	right:0;
+	bottom:-8px;
+}
+
+.preview-csv-textarea {
+	resize: vertical;
+	min-width: 200px;
+	height: 100%;
+	--type-ramp-base-font-size: 14px;
+}
+
+body .modal {
+	z-index: 200; /*to be in front of handson table cols*/
+}
+
+#help-modal .modal-content {
+	width: 80%;
+}
+
+#ask-reload-file-modal {
+
+}
+
+#source-file-changed-modal {
+	
+}
+
+.centered .modal-content {
+	text-align: center;
+}
+
+.row-col-insert-btns {
+	display: flex;
+	flex-direction: column;
+	margin-right: 10px;
+	width: 33px;
+}
+.row-col-insert-btns vscode-button {
+	padding: 1px;
+	height: auto;
+	margin: 0;
+	height: 18px;
+}
+
+
+#add-row-btn,
+#add-col-btn {
+	margin-right: -1px;
+}
+
+/* --- side bar --- */
+
+.side-paneled {
+	display: flex;
+	flex: 1;
+	/* needs to be hidden else the content (the table height will resize this larger than it should), see onResizeGrid */
+	overflow: hidden;
+}
+
+.side-paneled .side-panel {
+	padding: 5px 5px 5px 0; /* body padding -> use 0 */
+	/* border-left: 1px solid #8e8e8e; */
+	/* width: 155px; */
+	min-width: 150px; /* see {@link minSidebarWidthInPx}*/
+	max-width: 150px;
+	display: var(--extension-side-panel-display);
+}
+
+#left-panel-toggle {
+	width: 18px;
+	height: 18px;
+}
+
+#side-panel-inner {
+	flex: 1;
+}
+
+.left-panel-toggle-icon-collapse {
+	display: var(--extension-side-panel-collapse-icon-display);
+}
+
+.left-panel-toggle-icon-expand {
+	display: var(--extension-side-panel-expand-icon-display);
+}
+
+.side-panel-toggle-wrapper {
+	padding: 5px;
+	display: flex;
+	align-items: center;
+}
+
+#side-panel-resize-handle {
+	width: 3px;
+	border-right: 1px solid #8e8e8e52;
+	cursor: ew-resize;
+}
+
+.side-panel .stat {
+	padding-bottom: 3px;
+}
+
+.side-panel .stat div:nth-child(2) {
+	padding-left: 1rem;
+	word-break: break-all;
+}
+
+.side-panel .sub-stat {
+	padding-bottom: 3px;
+	padding-left: 1rem;
+}
+
+.side-panel .sub-stat div:nth-child(2) {
+	padding-left: 1rem;
+}
+
+
+.side-panel .stat.divider {
+	border-bottom: 1px solid #8e8e8e52;
+	margin-bottom: 3px;
+}
+
+.radio-list .radio {
+	display: block;
+}
+
+.radio-list .radio + .radio {
+	margin-left: 0;
+	margin-top: .5em;
+}
+
+
+/* from https://gist.github.com/jeromyanglim/3952143 */
+/*usage:  <div className="keys">A</div> */
+.keys {
+  background: #eee;
+  padding: 2px 6px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  -moz-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px #ffffff inset;
+  -webkit-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px #ffffff inset;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px #ffffff inset;
+  background-color: #FAFAFA;
+  border-color: #CCCCCC #CCCCCC #FFFFFF;
+  border-style: solid solid none;
+  border-width: 1px 1px medium;
+  color: #444444;
+  font-family: 'Helvetica Neue', Helvetica, Arial, Sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  white-space: nowrap;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.margin-centered {
+	margin: auto;
+}
+
+.hidden-row {
+	display: none;
+}
+
+/* css cannot  select previous selements... */
+.hidden-row-previous-row {
+}
+
+.hidden-row-previous-row > th {
+	position: relative;
+	overflow: visible;
+}
+
+/* this is not visible...*/
+tr + tr.hidden-row {
+}
+
+tr.hidden-row + tr > th {
+	position: relative;
+	overflow: visible;
+}
+
+tr.hidden-row + tr > th:before {
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	content: '\f0de';
+	position: absolute;
+	right: 0;
+	top: -3px;
+}
+
+tr.hidden-row-previous-row > th:after {
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	content: '\f0dd';
+	position: absolute;
+	right: 0;
+	bottom: -4px;
+}
+
+.find-widget {
+	display: flex;
+	position: fixed;
+	/* right: 100px; */ /* set this directly in html so we can access it via .style*/
+	top: 0;
+	height: 34px;
+
+	box-shadow: 0 0 8px 2px rgb(0 0 0 / 16%);
+	z-index: 2;
+	/* width: 440px; */
+	background-color: var(--vscode-editor-background);
+}
+.find-widget #find-widget-info {
+	font-size: 13px;
+}
+
+.find-widget .gripper {
+	cursor: grab;
+	margin: 5px;
+	color: #6d6d6d;
+}
+.find-widget .gripper:active {
+	cursor: grabbing;
+}
+
+.find-widget .find-options {
+	margin-top: -2px;
+}
+
+.find-widget .find-options vscode-button {
+	margin-left: 2px;
+	border-radius: 3px;
+	height: 20px;
+	width: 20px;
+}
+
+.find-widget .find-options vscode-button span {
+	font-size: 11px;
+	margin-top: 5px;
+}
+
+
+.find-widget .find-options #find-window-option-regex span {
+	position: relative;
+}
+
+.find-widget .find-options #find-window-option-regex span i:nth-child(1) {
+	position: absolute;
+	bottom: 2px;
+	left: 2px;
+	font-size: 4px;
+}
+.find-widget .find-options #find-window-option-regex span i:nth-child(2) {
+	position: absolute;
+	top: -1px;
+	right: 1px;
+	font-size: 7px;
+}
+
+.find-widget .find-options #find-window-option-whole-cell span {
+	/* border-bottom: 1px solid var(--foreground); */
+	/* border-top: 1px solid var(--foreground); */
+	text-decoration: overline underline;
+}
+
+.find-widget .find-options #find-window-option-whole-cell-trimmed span {
+	/* border-bottom: 1px solid var(--foreground); */
+	text-decoration: underline;
+}
+
+.find-widget .find-navigation-actions {
+	margin-right: 5px;
+	display: flex;
+	align-items: center;
+}
+
+.find-widget .find-navigation-actions vscode-button,
+.find-widget #find-widget-start-search {
+	width: 26px;
+	height: 26px;
+	text-align: center;
+}
+
+.find-widget .info {
+	display: flex;
+	margin-right: 5px;
+	align-self: center;
+	align-items: center;
+	white-space: nowrap;
+}
+
+.find-widget .search-input-wrapper {
+	display: inline-flex;
+	flex-direction: column;
+	position: relative;
+	margin: 5px 3px 5px 5px;
+}
+.find-widget .search-input-wrapper .input {
+	height: 23px;
+	/* width: auto; */
+	/* padding: 0 4px;
+	border-radius: 0;
+	border: 1px solid transparent; */
+}
+.find-widget .search-input-wrapper .input:focus {
+	border-color: var(--focus-border);
+	outline: none;
+}
+
+.find-widget .search-input-wrapper .input:disabled {
+	color: #757575;
+}
+
+.outdated-search {
+	color: rgb(224, 193, 69);
+	margin-left: 5px;
+}
+
+.find-widget .error-input {
+	border: 1px solid rgb(190, 17, 0)!important;;
+}
+
+.find-widget .error-input:focus + .error-message {
+	display: block;
+}
+
+.find-widget .error-message {
+	display: none;
+	padding: 5px;
+	font-size: 13px;
+	background-color: rgb(90, 29, 29);
+	border: 1px solid rgb(190, 17, 0);
+}
+
+.find-widget .divider {
+	margin: 3px 5px;
+	width: 2px;
+}
+
+.find-widget .progress-bar {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: none;
+
+	height: 2px;
+	background-color: #3384ff;
+}
+
+.div-disabled {
+	opacity: 0.2!important;
+	pointer-events: none;
+}
+
+.div-readonly-disabled {
+	opacity: 0.7!important;
+	pointer-events: none;
+}
+
+div.field.same-line {
+	display: flex;
+	align-items: center;
+}
+
+div.field.same-line label {
+	margin-right: 0.5rem;
+}
+
+/* options bar*/
+
+.all-options {
+	display: flex;
+	align-items: stretch;
+}
+.all-options th {
+	vertical-align: middle;
+}
+
+.all-options td {
+	height: 100%;
+}
+
+.all-options table {
+	width: 100%;
+	border-collapse: initial;
+}
+
+.options-bar {
+	padding: 0.3em;
+}
+
+.options-bar:not(:last-child) {
+	margin-right: 5px;
+}
+
+.options-title {
+	padding: 0 10px;
+	white-space: nowrap;
+	font-size: 100%;
+}
+
+.options-title > div:nth-child(1) {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.options-title vscode-button {
+	vertical-align: middle;
+	height: 26px;
+}
+
+.options-title vscode-button span {
+	width: 20px;
+	margin: 0 3px;
+}
+.options-title vscode-button i {
+	font-size: 1rem;
+}
+.options-title i {
+	font-size: 1rem;
+}
+.options-title .changeable i {
+	font-size: inherit;
+}
+
+.options-title vscode-button#force-column-resize-icon {
+
+}
+
+/* e.g. fixed rows */
+.options-title .changeable-indicator {
+	vertical-align: middle;
+	align-items: center;
+	display: inline-flex;
+	font-size: calc(var(--vscode-editor-font-size) + 2px);
+}
+
+.options-title .changeable-indicator .text {
+	min-width: 18px;
+}
+
+.options-title .changeable-indicator .changeable {
+	display: inline-flex;
+	flex-direction: column;
+	vertical-align: top;
+}
+
+.options-title .toggle-btn {
+	position: relative;
+	display: inline-flex;
+	vertical-align: middle;
+}
+
+#is-readonly-mode-toggle .fas.fa-slash:nth-child(2) {
+	position: absolute;
+	left: 5px;
+	top: 7px;
+}
+
+#is-readonly-mode-toggle .fas.fa-slash:nth-child(3) {
+	position: absolute;
+	left: 4px;
+	top: 9px;
+	color: var(--vscode-editor-background);
+}
+
+#is-readonly-mode-toggle.active {
+	color: var(--warning-color-all-themes);
+}
+
+.options-title .toggle-btn .active {
+	color: white;
+
+}
+
+
+.rotated-90deg {
+	transform: rotate(90deg);
+}
+
+.options-title .changeable-indicator .changeable div { /* this is the value of the indicator */
+	display: inline-block;
+	min-width: 16px;
+}
+
+.options-title .changeable-indicator .changeable span {
+	font-size: calc(var(--vscode-editor-font-size) - 3px);
+}
+
+.all-options tbody td:not(:last-child) .options-content {
+	padding: 0.5em 2em 0.5em 0.5em;
+}
+
+.options-content {
+	padding: 0.5em 0.5em 0.5em 0.5em;
+	height: 100%;
+}
+
+#read-options-content,
+#write-options-content,
+#preview-content {
+	display: var(--extension-options-bar-display);
+}
+
+#read-options-content > div:nth-child(1),
+#write-options-content > div:nth-child(1) {
+	margin-top: 0;
+}
+
+/* TODO not working */
+vscode-dropdown .selected-value {
+	--type-ramp-base-font-size: 14px;
+	font-size: 14px;
+}
+
+
+/* END options bar*/
+
+/* windows textarea outline fix (is red, should be blue) */
+
+textarea.handsontableInput {
+	outline: #5292f7;
+}
+
+.switch[type=checkbox].toggle-auto-future+label:before {
+	background: #dcd164;
+}
+/* --- copied from bulma-extension --- */
+.switch[type=checkbox] {
+	outline: 0;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	display: inline-block;
+	position: absolute;
+	opacity: 0
+}
+
+.switch[type=checkbox]+label {
+	position: relative;
+	display: initial;
+	font-size: 1rem;
+	line-height: initial;
+	padding-left: 3.5rem;
+	padding-top: .2rem;
+	cursor: pointer
+}
+
+.switch[type=checkbox]+label::before,.switch[type=checkbox]+label:before {
+	position: absolute;
+	display: block;
+	top: 0;
+	left: 0;
+	width: 3rem;
+	height: 1.5rem;
+	border: .1rem solid transparent;
+	border-radius: 4px;
+	background: #b5b5b5;
+	content: ''
+}
+
+.switch[type=checkbox]+label::after,.switch[type=checkbox]+label:after {
+	display: block;
+	position: absolute;
+	top: .25rem;
+	left: .25rem;
+	width: 1rem;
+	height: 1rem;
+	-webkit-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0);
+	border-radius: 4px;
+	background: #fff;
+	transition: all .25s ease-out;
+	content: ''
+}
+
+.switch[type=checkbox]:checked+label::before,.switch[type=checkbox]:checked+label:before {
+	background: #00d1b2
+}
+
+.switch[type=checkbox]:checked+label::after {
+	left: 1.625rem
+}
+
+.switch[type=checkbox].is-rounded+label::before,.switch[type=checkbox].is-rounded+label:before {
+	border-radius: 24px
+}
+
+.switch[type=checkbox].is-rounded+label::after,.switch[type=checkbox].is-rounded+label:after {
+	border-radius: 50%
+}
+
+.tooltip {
+	position: relative
+}
+
+.tooltip.is-tooltip-active:not(.is-loading)::after,.tooltip:hover:not(.is-loading)::after {
+	z-index: 99999;
+	position: absolute;
+	display: inline-block;
+	pointer-events: none
+}
+
+.tooltip.is-tooltip-active::before,.tooltip:hover::before {
+	z-index: 99999;
+	position: absolute;
+	display: inline-block;
+	pointer-events: none
+}
+
+.tooltip.is-tooltip-active:not(.is-loading)::after,.tooltip:hover:not(.is-loading)::after {
+	content: "";
+	border-style: solid;
+	border-width: .5rem
+}
+
+.tooltip.is-tooltip-active::before,.tooltip:hover::before {
+	opacity: 0;
+	content: attr(data-tooltip);
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-size: .75rem;
+	padding: .4rem .8rem;
+	background: rgba(74,74,74,.9);
+	border-radius: 4px;
+	color: #fff;
+	max-width: 24rem
+}
+
+.tooltip.is-tooltip-active:not(.is-loading)::after,.tooltip:focus:not(.is-loading)::after,.tooltip:hover:not(.is-loading)::after {
+	opacity: 1;
+	margin-left: -.5rem;
+	margin-top: -.5rem
+}
+
+.tooltip.is-tooltip-active::before,.tooltip:focus::before,.tooltip:hover::before {
+	opacity: 1
+}
+
+.tooltip::before {
+	top: auto;
+	bottom: 100%;
+	left: 50%;
+	right: auto
+}
+
+.tooltip.is-tooltip-active:not(.is-loading)::after,.tooltip:focus:not(.is-loading)::after,.tooltip:hover:not(.is-loading)::after {
+	top: 0;
+	bottom: auto;
+	left: 50%;
+	right: auto;
+	border-color: rgba(74,74,74,.9) transparent transparent transparent
+}
+
+.tooltip.is-tooltip-active::before,.tooltip:focus::before,.tooltip:hover::before {
+	-webkit-transform: translate(-50%,-.5rem);
+	transform: translate(-50%,-.5rem)
+}
+
+.tooltip.is-tooltip-right::before {
+	top: auto;
+	bottom: 50%;
+	left: 100%;
+	right: auto;
+	-webkit-transform: translate(-1rem,50%);
+	transform: translate(-1rem,50%)
+}
+
+.tooltip.is-tooltip-right.is-tooltip-active:not(.is-loading)::after,.tooltip.is-tooltip-right:focus:not(.is-loading)::after,.tooltip.is-tooltip-right:hover:not(.is-loading)::after {
+	top: 50%;
+	left: 100%;
+	right: auto;
+	border-color: transparent rgba(74,74,74,.9) transparent transparent
+}
+
+.tooltip.is-tooltip-right.is-tooltip-active::before,.tooltip.is-tooltip-right:focus::before,.tooltip.is-tooltip-right:hover::before {
+	-webkit-transform: translate(.5rem,50%);
+	transform: translate(.5rem,50%)
+}
+
+.tooltip.is-tooltip-bottom::before {
+	top: 100%;
+	bottom: auto;
+	left: 50%;
+	right: auto;
+	-webkit-transform: translate(-50%,-1rem);
+	transform: translate(-50%,-1rem)
+}
+
+.tooltip.is-tooltip-bottom.is-tooltip-active:not(.is-loading)::after,.tooltip.is-tooltip-bottom:focus:not(.is-loading)::after,.tooltip.is-tooltip-bottom:hover:not(.is-loading)::after {
+	top: 100%;
+	bottom: auto;
+	left: 50%;
+	right: auto;
+	border-color: transparent transparent rgba(74,74,74,.9) transparent
+}
+
+.tooltip.is-tooltip-bottom.is-tooltip-active::before,.tooltip.is-tooltip-bottom:focus::before,.tooltip.is-tooltip-bottom:hover::before {
+	-webkit-transform: translate(-50%,.5rem);
+	transform: translate(-50%,.5rem)
+}
+
+.tooltip.is-tooltip-left::before {
+	top: auto;
+	bottom: 50%;
+	left: auto;
+	right: 100%;
+	-webkit-transform: translate(1rem,50%);
+	transform: translate(1rem,50%)
+}
+
+.tooltip.is-tooltip-left.is-tooltip-active:not(.is-loading)::after,.tooltip.is-tooltip-left:focus:not(.is-loading)::after,.tooltip.is-tooltip-left:hover:not(.is-loading)::after {
+	top: 50%;
+	bottom: auto;
+	left: auto;
+	right: calc(100% - .5rem);
+	border-color: transparent transparent transparent rgba(74,74,74,.9)
+}
+
+.tooltip.is-tooltip-left.is-tooltip-active::before,.tooltip.is-tooltip-left:focus::before,.tooltip.is-tooltip-left:hover::before {
+	-webkit-transform: translate(-.5rem,50%);
+	transform: translate(-.5rem,50%)
+}
+
+.tooltip.is-tooltip-multiline::before {
+	min-width: 24rem;
+	text-overflow: clip;
+	white-space: normal;
+	word-break: keep-all
+}
+
+.tooltip.is-tooltip-white:not(.is-loading)::after {
+	border-color: rgba(255,255,255,.9) transparent transparent transparent
+}
+
+.tooltip.is-tooltip-white.is-tooltip-right:not(.is-loading)::after {
+	border-color: transparent rgba(255,255,255,.9) transparent transparent
+}
+
+.tooltip.is-tooltip-white.is-tooltip-bottom:not(.is-loading)::after {
+	border-color: transparent transparent rgba(255,255,255,.9) transparent
+}
+
+.tooltip.is-tooltip-white.is-tooltip-left:not(.is-loading)::after {
+	border-color: transparent transparent transparent rgba(255,255,255,.9)
+}
+
+.tooltip.is-tooltip-white::before {
+	background: rgba(255,255,255,.9);
+	color: #0a0a0a
+}
+
+.tooltip.is-tooltip-black:not(.is-loading)::after {
+	border-color: rgba(10,10,10,.9) transparent transparent transparent
+}
+
+.tooltip.is-tooltip-black.is-tooltip-right:not(.is-loading)::after {
+	border-color: transparent rgba(10,10,10,.9) transparent transparent
+}
+
+.tooltip.is-tooltip-black.is-tooltip-bottom:not(.is-loading)::after {
+	border-color: transparent transparent rgba(10,10,10,.9) transparent
+}
+
+.tooltip.is-tooltip-black.is-tooltip-left:not(.is-loading)::after {
+	border-color: transparent transparent transparent rgba(10,10,10,.9)
+}
+
+.tooltip.is-tooltip-black::before {
+	background: rgba(10,10,10,.9);
+	color: #fff
+}
+
+.tooltip.is-tooltip-light:not(.is-loading)::after {
+	border-color: rgba(245,245,245,.9) transparent transparent transparent
+}
+
+.tooltip.is-tooltip-light.is-tooltip-right:not(.is-loading)::after {
+	border-color: transparent rgba(245,245,245,.9) transparent transparent
+}
+
+.tooltip.is-tooltip-light.is-tooltip-bottom:not(.is-loading)::after {
+	border-color: transparent transparent rgba(245,245,245,.9) transparent
+}
+
+.tooltip.is-tooltip-light.is-tooltip-left:not(.is-loading)::after {
+	border-color: transparent transparent transparent rgba(245,245,245,.9)
+}
+
+.tooltip.is-tooltip-light::before {
+	background: rgba(245,245,245,.9);
+	color: #363636
+}
+
+.tooltip.is-tooltip-dark:not(.is-loading)::after {
+	border-color: rgba(54,54,54,.9) transparent transparent transparent
+}
+
+.tooltip.is-tooltip-dark.is-tooltip-right:not(.is-loading)::after {
+	border-color: transparent rgba(54,54,54,.9) transparent transparent
+}
+
+.tooltip.is-tooltip-dark.is-tooltip-bottom:not(.is-loading)::after {
+	border-color: transparent transparent rgba(54,54,54,.9) transparent
+}
+
+.tooltip.is-tooltip-dark.is-tooltip-left:not(.is-loading)::after {
+	border-color: transparent transparent transparent rgba(54,54,54,.9)
+}
+
+.tooltip.is-tooltip-dark::before {
+	background: rgba(54,54,54,.9);
+	color: #f5f5f5
+}
+
+.tooltip.is-tooltip-primary:not(.is-loading)::after {
+	border-color: rgba(0,209,178,.9) transparent transparent transparent
+}
+
+.tooltip.is-tooltip-primary.is-tooltip-right:not(.is-loading)::after {
+	border-color: transparent rgba(0,209,178,.9) transparent transparent
+}
+
+.tooltip.is-tooltip-primary.is-tooltip-bottom:not(.is-loading)::after {
+	border-color: transparent transparent rgba(0,209,178,.9) transparent
+}
+
+.tooltip.is-tooltip-primary.is-tooltip-left:not(.is-loading)::after {
+	border-color: transparent transparent transparent rgba(0,209,178,.9)
+}
+
+.tooltip.is-tooltip-primary::before {
+	background: rgba(0,209,178,.9);
+	color: #fff
+}
+
+.tooltip.is-tooltip-link:not(.is-loading)::after {
+	border-color: rgba(50,115,220,.9) transparent transparent transparent
+}
+
+.tooltip.is-tooltip-link.is-tooltip-right:not(.is-loading)::after {
+	border-color: transparent rgba(50,115,220,.9) transparent transparent
+}
+
+.tooltip.is-tooltip-link.is-tooltip-bottom:not(.is-loading)::after {
+	border-color: transparent transparent rgba(50,115,220,.9) transparent
+}
+
+.tooltip.is-tooltip-link.is-tooltip-left:not(.is-loading)::after {
+	border-color: transparent transparent transparent rgba(50,115,220,.9)
+}
+
+.tooltip.is-tooltip-link::before {
+	background: rgba(50,115,220,.9);
+	color: #fff
+}
+
+.tooltip.is-tooltip-info:not(.is-loading)::after {
+	border-color: rgba(32,156,238,.9) transparent transparent transparent
+}
+
+.tooltip.is-tooltip-info.is-tooltip-right:not(.is-loading)::after {
+	border-color: transparent rgba(32,156,238,.9) transparent transparent
+}
+
+.tooltip.is-tooltip-info.is-tooltip-bottom:not(.is-loading)::after {
+	border-color: transparent transparent rgba(32,156,238,.9) transparent
+}
+
+.tooltip.is-tooltip-info.is-tooltip-left:not(.is-loading)::after {
+	border-color: transparent transparent transparent rgba(32,156,238,.9)
+}
+
+.tooltip.is-tooltip-info::before {
+	background: rgba(32,156,238,.9);
+	color: #fff
+}
+
+.tooltip.is-tooltip-success:not(.is-loading)::after {
+	border-color: rgba(35,209,96,.9) transparent transparent transparent
+}
+
+.tooltip.is-tooltip-success.is-tooltip-right:not(.is-loading)::after {
+	border-color: transparent rgba(35,209,96,.9) transparent transparent
+}
+
+.tooltip.is-tooltip-success.is-tooltip-bottom:not(.is-loading)::after {
+	border-color: transparent transparent rgba(35,209,96,.9) transparent
+}
+
+.tooltip.is-tooltip-success.is-tooltip-left:not(.is-loading)::after {
+	border-color: transparent transparent transparent rgba(35,209,96,.9)
+}
+
+.tooltip.is-tooltip-success::before {
+	background: rgba(35,209,96,.9);
+	color: #fff
+}
+
+.tooltip.is-tooltip-warning:not(.is-loading)::after {
+	border-color: rgba(255,221,87,.9) transparent transparent transparent
+}
+
+.tooltip.is-tooltip-warning.is-tooltip-right:not(.is-loading)::after {
+	border-color: transparent rgba(255,221,87,.9) transparent transparent
+}
+
+.tooltip.is-tooltip-warning.is-tooltip-bottom:not(.is-loading)::after {
+	border-color: transparent transparent rgba(255,221,87,.9) transparent
+}
+
+.tooltip.is-tooltip-warning.is-tooltip-left:not(.is-loading)::after {
+	border-color: transparent transparent transparent rgba(255,221,87,.9)
+}
+
+.tooltip.is-tooltip-warning::before {
+	background: rgba(255,221,87,.9);
+	color: rgba(0,0,0,.7)
+}
+
+.tooltip.is-tooltip-danger:not(.is-loading)::after {
+	border-color: rgba(255,56,96,.9) transparent transparent transparent
+}
+
+.tooltip.is-tooltip-danger.is-tooltip-right:not(.is-loading)::after {
+	border-color: transparent rgba(255,56,96,.9) transparent transparent
+}
+
+.tooltip.is-tooltip-danger.is-tooltip-bottom:not(.is-loading)::after {
+	border-color: transparent transparent rgba(255,56,96,.9) transparent
+}
+
+.tooltip.is-tooltip-danger.is-tooltip-left:not(.is-loading)::after {
+	border-color: transparent transparent transparent rgba(255,56,96,.9)
+}
+
+.tooltip.is-tooltip-danger::before {
+	background: rgba(255,56,96,.9);
+	color: #fff
+}
+
+vscode-checkbox,
+vscode-button,
+vscode-radio {
+	font-size: 14px;
+}
+
+vscode-button span {
+	font-size: 14px;
+}
+
+#find-widget-input {
+	background: var(--input-background);
+	border-radius: calc(var(--corner-radius) * 1px);
+	border: calc(var(--border-width) * 1px) solid var(--dropdown-border);
+	color: var(--input-foreground);
+	padding: 0;
+}
+#find-widget-input input {
+	padding: 0;
+}
+/* ca vs code webview toolkit */
+
+input.vscode-text-field {
+	height: calc(var(--input-height) * 1px);
+	color: var(--input-foreground);
+	background: var(--input-background);
+	border-radius: calc(var(--corner-radius) * 1px);
+	border: calc(var(--border-width) * 1px) solid var(--dropdown-border);
+	padding: 0 calc(var(--design-unit) * 2px + 1px);
+	outline: none;
+	margin-top: 3px;
+	font-size: 14px;
+}
+
+input.vscode-text-field:focus {
+	border-color: var(--focus-border);
+}
+
+/* from bulma */
+html {
+	font-size: 16px;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	text-rendering: optimizeLegibility;
+	-webkit-text-size-adjust: 100%;
+	-moz-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	box-sizing: border-box;
+}
+body {
+	line-height: 1.5
+}
+span {
+	font-style: inherit;
+	font-weight: inherit
+}
+*,::after,::before {
+	box-sizing: inherit;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+table td,table th {
+	text-align: left;
+	vertical-align: top
+}
+.file-cta,.file-name,.input,.pagination-ellipsis,.pagination-link,.pagination-next,.pagination-previous,.select select,.textarea {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	align-items: center;
+	display: inline-flex;
+	font-size: 1rem;
+	height: 2.25em;
+	justify-content: flex-start;
+	line-height: 1.5;
+	padding-bottom: calc(.375em - 1px);
+	padding-right: 0.5rem;
+	position: relative;
+	vertical-align: top;
+	min-width: 110px;
+}
+body,button,input,select,textarea {
+	font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.field {
+	margin-top: 0.5rem;
+}
+
+.modal {
+	align-items: center;
+	display: none;
+	flex-direction: column;
+	justify-content: center;
+	overflow: hidden;
+	position: fixed;
+	z-index: 40
+}
+
+.modal.is-active {
+	display:flex;
+}
+
+.modal-background {
+	background-color: rgba(10,10,10,.86)
+}
+
+.is-overlay,.modal,.modal-background {
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0
+}
+
+.modal-card,.modal-content {
+	margin: 0 20px;
+	max-height: calc(100vh - 160px);
+	overflow: auto;
+	position: relative;
+	width: 100%
+}
+
+@media screen and (min-width: 769px),print {
+	.modal-card,.modal-content {
+			margin:0 auto;
+			max-height: calc(100vh - 40px);
+			width: 640px
+	}
+}
+
+.modal-close {
+	background: 0 0;
+	height: 40px;
+	position: fixed;
+	right: 20px;
+	top: 20px;
+	width: 40px
+}
+
+.box {
+	background-color: #fff;
+	border-radius: 6px;
+	box-shadow: 0 2px 3px rgba(10,10,10,.1),0 0 0 1px rgba(10,10,10,.1);
+	color: #4a4a4a;
+	display: block;
+	padding: 1.25rem
+}
+
+.title {
+	color: #363636;
+	font-size: 2rem;
+	font-weight: 600;
+	line-height: 1.125
+}
+
+.title.is-3 {
+	font-size: 2rem
+}
+
+h1,h2,h3,h4,h5 {
+	margin: 0;
+	padding: 0
+}
+
+
+.modal-content .block:not(:last-child),.box:not(:last-child),.breadcrumb:not(:last-child),.content:not(:last-child),.highlight:not(:last-child),.level:not(:last-child),.list:not(:last-child),.message:not(:last-child),.notification:not(:last-child),.progress:not(:last-child),.subtitle:not(:last-child),.table-container:not(:last-child),.table:not(:last-child),.tabs:not(:last-child),.title:not(:last-child) {
+	margin-bottom: 1.5rem
+}
+
+.modal .modal-close.is-large {
+	height: 40px;
+	width: 40px;
+	font-size: 2rem;
+	color: white;
+	border: none;
+}

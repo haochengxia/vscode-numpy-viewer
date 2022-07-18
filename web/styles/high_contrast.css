@@ -1,0 +1,211 @@
+body.vscode-high-contrast {
+	color: white;
+}
+
+
+.vscode-high-contrast .button.is-light {
+	color: black;
+}
+
+.vscode-high-contrast .button.is-outlined:hover {
+	background-color: white;
+	color: black;
+}
+
+.vscode-high-contrast .button.is-outlined:focus {
+	background-color: transparent;
+	color: white;
+}
+
+.vscode-high-contrast .select select {
+	color: black;
+}
+
+.vscode-high-contrast .title {
+	color: white;
+}
+
+.vscode-dark .radio:hover {
+	color: white;
+}
+
+.vscode-high-contrast .box {
+	background-color: black;
+	color: white;
+}
+
+.vscode-high-contrast .keys {
+	color: white;
+	background: #404040;
+	border-color: #ccc #aaa #888 #bbb;
+	-moz-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px #888 inset;
+  -webkit-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px #888 inset;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px #888 inset;
+}
+
+.vscode-high-contrast a {
+	color: #f9f500;
+}
+
+.vscode-high-contrast a:hover {
+	color: red;
+}
+
+* handson table styles */
+
+.vscode-high-contrast .ht_master,
+.vscode-high-contrast .handsontable th {
+	color: #d0d0d0 !important;
+}
+
+
+/* Edit mode */
+.vscode-high-contrast .handsontableInput {
+	background-color: #504f4f!important;
+	color: #d0d0d0;
+}
+
+/* All headers */
+.vscode-high-contrast .handsontable th {
+	background-color: rgb(26, 29, 29);
+	color: white;
+}
+
+.vscode-high-contrast .handsontable span.colHeader.columnSorting::before {
+	filter: invert(100%);
+}
+
+.vscode-high-contrast .ht_clone_top th {
+  border-color: #5c5c5c;
+}
+
+/* fixed rows top */
+.vscode-high-contrast .ht_clone_top tr:nth-of-type(odd)> td {
+	background-color: black;
+	border-color: #5c5c5c;
+}
+
+.vscode-high-contrast .ht_clone_top tr:nth-of-type(even)> td {
+	background-color: #1d1d1d;
+	border-color: #5c5c5c;
+}
+
+.vscode-high-contrast .ht_clone_top tr:last-child > td {
+	border-bottom-color: red;
+}
+
+.vscode-dark .handsontable tr {
+	background: #5c5c5c;
+}
+
+/* normal rows */
+.vscode-high-contrast .ht_master tr:nth-of-type(odd) > td {
+	background-color: black;
+	border-color: #5c5c5c;
+}
+
+.vscode-high-contrast .ht_master tr:nth-of-type(even) > td {
+	background-color: #1d1d1d;
+	border-color: #5c5c5c;
+}
+
+.vscode-high-contrast .ht_clone_left th {
+	background-color:rgb(26, 29, 29);
+	border-color: #5c5c5c !important;
+}
+
+.vscode-high-contrast .ht_clone_top th {
+	background-color: rgb(26, 29, 29);
+	border-color: #5c5c5c !important;
+}
+
+.vscode-high-contrast .handsontable tbody th.ht__highlight.foo,
+.vscode-high-contrast .handsontable thead th.ht__highlight.foo {
+  background-color: red;
+}
+
+/* we don't need this... first real column...*/
+.vscode-high-contrast .handsontable th:nth-child(2) {
+	/* border-left: 1px solid #5c5c5c !important; */
+}
+
+.vscode-high-contrast .ht_clone_top thead tr:nth-child(2) {
+	border: 0 !important;
+}
+
+.vscode-high-contrast .ht_clone_top_left_corner th {
+  border-color: #5c5c5c!important;
+}
+
+.vscode-high-contrast .ht_clone_top_left_corner thead tr:nth-child(1) {
+	border-right: 0 !important;
+}
+
+.vscode-high-contrast .comment-comment-row {
+	/* background-color: #f7f7f7!important; */
+	color: #ff9d00;
+}
+
+.vscode-high-contrast .comment-row td:nth-child(n+3) {
+	color: red;
+}
+
+/* context menu */
+.vscode-high-contrast .htContextMenu table tbody tr td {
+	background-color: black !important;
+	border-color: #5c5c5c !important;
+}
+
+.vscode-high-contrast .htContextMenu table tbody tr td:hover {
+	background-color: #ff0d0d !important;
+}
+.vscode-high-contrast .htContextMenu table tbody tr td.htDisabled:hover {
+	background-color: black !important;
+}
+
+.vscode-high-contrast .htContextMenu table.htCore {
+	border-color: #5c5c5c !important;
+}
+
+.vscode-high-contrast .ht_master tr> td.search-result-cell {
+	background-color: #9d00ff!important;
+}
+
+.vscode-high-contrast .find-widget{
+	background-color: black;
+	color: white;
+	border: 2px solid #6fc3df;
+}
+
+.vscode-high-contrast .find-widget .divider {
+	background-color: #676767;
+}
+
+.vscode-high-contrast .find-widget .btn.active {
+	background-color: #28ff00;
+}
+
+.vscode-high-contrast .find-widget .error-message {
+	color: white;
+}
+
+.vscode-high-contrast .options-title {
+	font-size: 130%;
+	color: #d0d0d0;
+}
+
+.vscode-high-contrast .all-options table {
+	border: 1px solid white;
+	border-collapse: initial;
+	border-radius: 10px;
+}
+
+.vscode-high-contrast .handsontable .htDimmed {
+	/*color: #cacaca;*/ /*harder to read*/
+	cursor: pointer; /*as color does not really work maybe this helps?*/
+	color: inherit;
+}
+
+.vscode-light .row-col-insert-btns {
+	border-left: 1px solid white;
+}

@@ -1,6 +1,6 @@
 // Modified from https://github.com/ludwigschubert/js-numpy-parser/blob/master/src/main.js
 
-import {StringArray} from './stringArray';
+import {StringArray} from './type/stringArray';
 
 var stringArrEleSize = -1;
 
