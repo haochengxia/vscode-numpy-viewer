@@ -8,7 +8,7 @@ import { OSUtils } from './utils';
 
 type PreviewState = 'Disposed' | 'Visible' | 'Active';
 
-function loadArrayBuffer(file : string) {
+export function loadArrayBuffer(file : string) {
   const buffer = fs.readFileSync(file);                                                                                                                                                                                                                                                                                                                                                                                                                                                 
   return new Uint8Array(buffer).buffer; // only needed for node conversion
 }
