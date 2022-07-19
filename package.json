@@ -34,6 +34,22 @@
         ]
       }
     ],
+    "commands": [
+			{
+				"command": "numpy-viewer.createTableView",
+				"category": "NumpyViewer",
+				"title": "Table View"
+			}
+		],
+    "menus": {
+      "editor/title": [
+        { 
+          "when": "resourceExtname == .npy",
+          "command": "numpy-viewer.createTableView",
+          "group": "navigation"
+        }
+      ]
+    },
     "configuration": [
       {
         "title": "vscode-numpy-viewer configuration",
