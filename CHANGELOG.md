@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.11 (2022/07/19)
+
+- Feat: support bytes and bool array.
+- Issue found: CAN NOT display too large array (size > 10000000). (Wait to be solved)
+
 ## 0.0.10 (2022/07/19)
 
 - Update extension description.

@@ -1,9 +1,15 @@
 // Modified from https://github.com/ludwigschubert/js-numpy-parser/blob/master/src/main.js
 import * as fs from 'fs';
+import * as vscode from 'vscode';
 
+import { BytesArray } from './type/bytesArray';
+import { BoolArray } from './type/boolArray';
 import { StringArray } from './type/stringArray';
 
 var stringArrEleSize = -1;
+var bytesArrEleSize = -1;
+const MAX_OUTPUT_BOOL_LIMIT = 10000;
+// const MAX_ARR_LIMIT = 1000000;
 
 export function loadArrayBuffer(file: string) {
   const buffer = fs.readFileSync(file);
@@ -111,12 +117,33 @@ export function fromArrayBuffer(buffer: ArrayBuffer) {
   // Intepret the bytes according to the specified dtype
   var data;
   const constructor = typedArrayConstructorForDescription(header.descr);
-  if (constructor === String) {
-    var stringArray = new StringArray(buffer, reader.offset, stringArrEleSize);
-    data = stringArray.data;
-  } else {
-    data = new constructor(buffer, reader.offset);
+  switch (constructor) {
+    case String:
+      var stringArray = new StringArray(buffer, reader.offset, stringArrEleSize);
+      data = stringArray.data;
+      break;
+    case Number:
+      var bytesArray = new BytesArray(buffer, reader.offset, bytesArrEleSize);
+      data = bytesArray.data;
+      break;
+    case Boolean:
+      var boolArray = new BoolArray(buffer, reader.offset);
+      data = boolArray.data;
+      if (boolArray.eleNum > MAX_OUTPUT_BOOL_LIMIT) {
+        data = new Uint8Array(buffer, reader.offset);
+        vscode.window.showInformationMessage('Too long bool array, true and false have been replaced with numbers');
+        console.log('[+] true and false have been replaced with numbers');
+      }
+      break;
+    default:
+      data = new constructor(buffer, reader.offset);
   }
+  // if (constructor === String) {
+  //   var stringArray = new StringArray(buffer, reader.offset, stringArrEleSize);
+  //   data = stringArray.data;
+  // } else {
+  //   data = new constructor(buffer, reader.offset);
+  // }
 
   // Return object with same signature as NDArray expects: {data, shape}
   return { data: data, shape: header.shape, order: order };
@@ -127,6 +154,7 @@ function parseHeaderStr(headerStr: string) {
   const jsonHeader = headerStr
     .replace('L', '') // string array (116L,) -> (116,)
     .replace('U', 'str')
+    .replace('S', 'bytes')
     .toLowerCase() // boolean literals: False -> false
     .replace('(', '[').replace('),', ']') // Python tuple to JS array: (10,) -> [10,]
     .replace('[,', '[1,]').replace(',]', ',1]') // implicit dimensions: [10,] -> [10,1]
@@ -177,6 +205,9 @@ function typedArrayConstructorForDescription(dtypeDescription: string) {
     case '<f8': // "double" "longfloat"
       return Float64Array;
 
+    case '|b1':
+      return Boolean;
+
     // No support for ComplexFloating, on-number types (flexible/character/void...) yet
 
     default:
@@ -186,6 +217,13 @@ function typedArrayConstructorForDescription(dtypeDescription: string) {
         console.log('[+] String Array, element size is', size);
         stringArrEleSize = size;
         return String;
+      }
+      if (dtypeDescription.startsWith('|bytes')) {
+          const size = parseInt(dtypeDescription.slice(6));
+          console.log('[+] Bytes Array, element size is', size);
+          bytesArrEleSize = size;
+          // TODO change it, temp use this to identify
+          return Number;
       }
       throw new Error('Unknown or not yet implemented numpy dtype description: ' + dtypeDescription);
   }

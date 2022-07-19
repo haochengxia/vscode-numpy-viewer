@@ -281,6 +281,7 @@ export class NumpyPreview extends Disposable {
       // For single dim
       content = wrapWithSqBr(array.toString());
     }
+    console.log(content);
     return content;
   }
 }
