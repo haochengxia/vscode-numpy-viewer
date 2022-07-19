@@ -224,7 +224,6 @@ export class NumpyPreview extends Disposable {
       var multiArr = toMultiDimArray(array, arrayShape);
       switch (arrayShape.length) {
         case 2:
-          
           // TODO: import Table View for 2D array
           if (config.get('vscode-numpy-viewer.tableView')) {
             console.log('[*] Table view enabled, create html table');
