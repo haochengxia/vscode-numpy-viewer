@@ -1,6 +1,6 @@
 // Modified from https://github.com/ludwigschubert/js-numpy-parser/blob/master/src/main.js
 import * as fs from 'fs';
-import * as vscode from 'vscode';
+
 
 import { BytesArray } from './type/bytesArray';
 import { BoolArray } from './type/boolArray';
@@ -129,11 +129,10 @@ export function fromArrayBuffer(buffer: ArrayBuffer) {
     case Boolean:
       var boolArray = new BoolArray(buffer, reader.offset);
       data = boolArray.data;
-      if (boolArray.eleNum > MAX_OUTPUT_BOOL_LIMIT) {
-        data = new Uint8Array(buffer, reader.offset);
-        vscode.window.showInformationMessage('Too long bool array, true and false have been replaced with numbers');
-        console.log('[+] true and false have been replaced with numbers');
-      }
+      // if (boolArray.eleNum > MAX_OUTPUT_BOOL_LIMIT) {
+      //   data = new Uint8Array(buffer, reader.offset);
+      //   console.log('[+] true and false have been replaced with numbers');
+      // }
       break;
     default:
       data = new constructor(buffer, reader.offset);

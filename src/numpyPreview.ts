@@ -198,8 +198,8 @@ export class NumpyPreview extends Disposable {
       // comments are taken from https://docs.scipy.org/doc/numpy-1.14.1/neps/npy-format.html#format-specification-version-1-0
       // For a simple way to combine multiple arrays into a single file, one can use ZipFile to contain multiple “.npy” files. 
       // We recommend using the file extension “.npz” for these archives.
-      var AdmZip = require('adm-zip');
-      var zip = new AdmZip(loadBuffer(path));
+      var admZip = require('adm-zip');
+      var zip = new admZip(loadBuffer(path));
       var zipEntries = zip.getEntries();
       console.log(`[+] There are ${zipEntries.length} files in .npz file.`);
 

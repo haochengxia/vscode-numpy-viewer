@@ -19,7 +19,6 @@ class BoolArray implements RelativeIndexable<boolean>{
             }
             
         });
-        console.log(this.data);
     }
 
     at(index: number): boolean | undefined {

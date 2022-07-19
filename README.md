@@ -5,7 +5,7 @@
 [![Installs](https://vsmarketplacebadge.apphb.com/installs-short/Percy.vscode-numpy-viewer.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=Percy.vscode-numpy-viewer)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-> ! Current DO NOT support the display of very large arrays (e.g. size > 10,000,000).
+> ! Displaying very large arrays (e.g., size > 10,000,000) is not currently supported.
 
 Display (binary) .npy or.npz files in VSCode.
 
