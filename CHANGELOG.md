@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.9 (2022/07/16)
+
+- Feat: support .npz file.
+
 ## 0.0.8 (2022/07/16)
 
 - Feat: support string array (UTF-16).
