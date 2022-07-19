@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.0.9 (2022/07/16)
+## 0.0.9 (2022/07/19)
 
 - Feat: support .npz file.
 

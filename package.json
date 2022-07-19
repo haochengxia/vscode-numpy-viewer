@@ -1,7 +1,7 @@
 {
   "name": "vscode-numpy-viewer",
   "displayName": "vscode-numpy-viewer",
-  "description": "Display (binary) .npy files in VSCode.",
+  "description": "Display (binary) .npy or .npz files in VSCode.",
   "publisher": "Percy",
   "version": "0.0.9",
   "icon": "images/icon.png",

@@ -1,10 +1,11 @@
 # Numpy file viewer
 
 [![Version](https://vsmarketplacebadge.apphb.com/version/Percy.vscode-numpy-viewer.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=Percy.vscode-numpy-viewer)
+[![Downloads](https://vsmarketplacebadge.apphb.com/downloads-short/Percy.vscode-numpy-viewer.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=Percy.vscode-numpy-viewer)
 [![Installs](https://vsmarketplacebadge.apphb.com/installs-short/Percy.vscode-numpy-viewer.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=Percy.vscode-numpy-viewer)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-Display (binary) .npy files in VSCode.
+Display (binary) .npy or.npz files in VSCode.
 
 ![img](https://github.com/haochengxia/vscode-numpy-viewer/blob/screenshot/screenshot.gif?raw=true)
 
