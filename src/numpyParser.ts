@@ -10,6 +10,10 @@ export function loadArrayBuffer(file : string) {
   return new Uint8Array(buffer).buffer; // only needed for node conversion
 }
 
+export function loadBuffer(file : string) {
+  return fs.readFileSync(file);                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+}
+
 class DataViewReader {
     offset : number = 0;
     constructor(public dataView : DataView) {

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 
-import { fromArrayBuffer, loadArrayBuffer } from './numpyParser';
+import { fromArrayBuffer, loadArrayBuffer, loadBuffer } from './numpyParser';
 
 import { Disposable } from './disposable';
 import { OSUtils } from './utils';
@@ -189,6 +189,7 @@ export class NumpyPreview extends Disposable {
 
   private getWebviewContents(): string {
     var path = this.resource.path;
+    var content : string = '';
     switch (OSUtils.isWindows()) {
       case true: 
         path = this.resource.path.slice(1, );
@@ -197,7 +198,51 @@ export class NumpyPreview extends Disposable {
       default:
         console.log('[+] NOT Windows', path);
     }
-    const arrayBuffer = loadArrayBuffer(path);
+    if (path.endsWith('npz')) {
+      // Solve .npz file
+      var AdmZip = require('adm-zip');
+      var zip = new AdmZip(loadBuffer(path));
+      var zipEntries = zip.getEntries();
+      console.log(`[+] There are ${zipEntries.length} files in .npz file.`);
+
+      var names : Array<string> = [];
+      var buffers : Array<ArrayBuffer> = [];
+
+      zipEntries.forEach((entry : any) => {
+        names.push(entry.entryName);
+        buffers.push(new Uint8Array(entry.getData()).buffer);
+        // if (entry.entryName.match(/readme/i))
+        //   console.log(zip.readAsText(entry));
+      });
+      var contents : Array<string> = [];
+      for (var i=0; i<zipEntries.length; i++) {
+        contents.push(names[i]);
+        contents.push(this.bufferToString(buffers[i]));
+        content = contents.join(`<p/>`);
+      }
+    }
+    else {
+      const arrayBuffer = loadArrayBuffer(path);
+      content = this.bufferToString(arrayBuffer);
+    }
+    
+
+    
+    // Replace , with ,\n for reading
+    var re = /,/gi;
+    content = content.replace(re, `,\n`);
+    const head = `<!DOCTYPE html>
+    <html dir="ltr" mozdisallowselectionprint>
+    <head>
+    <meta charset="utf-8">
+    </head>`;
+    const tail = ['</html>'].join('\n');
+    const output =  head + `<body>              
+    <div id="x">` + content + `</div></body>` + tail;
+    return output;
+  }
+
+  private bufferToString (arrayBuffer : ArrayBuffer) {
     var { data: array, shape: arrayShape, order: order } = fromArrayBuffer(arrayBuffer);
     
     let tempShape : Array<Number> = arrayShape;
@@ -242,18 +287,6 @@ export class NumpyPreview extends Disposable {
       // For single dim
       content = wrapWithSqBr(array.toString());
     }
-    
-    // Replace , with ,\n for reading
-    var re = /,/gi;
-    content = content.replace(re, `,\n`);
-    const head = `<!DOCTYPE html>
-    <html dir="ltr" mozdisallowselectionprint>
-    <head>
-    <meta charset="utf-8">
-    </head>`;
-    const tail = ['</html>'].join('\n');
-    const output =  head + `<body>              
-    <div id="x">` + content + `</div></body>` + tail;
-    return output;
+    return content;
   }
 }
