@@ -7,10 +7,10 @@ export class NumpyCustomProvider implements vscode.CustomReadonlyEditorProvider 
   private readonly _previews = new Set<NumpyPreview>();
   private _activePreview: NumpyPreview | undefined;
 
-  constructor(private readonly extensionRoot: vscode.Uri) {}
+  constructor(private readonly extensionRoot: vscode.Uri) { }
 
   public openCustomDocument(uri: vscode.Uri): vscode.CustomDocument {
-    return { uri, dispose: (): void => {} };
+    return { uri, dispose: (): void => { } };
   }
 
   public async resolveCustomEditor(

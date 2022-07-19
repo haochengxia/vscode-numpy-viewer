@@ -1,10 +1,10 @@
 class StringArray implements RelativeIndexable<string>{
-    buffer : ArrayBuffer;
-    offset : number = 0;
-    eleSize : number = -1;
-    data : Array<string> = [];
+    buffer: ArrayBuffer;
+    offset: number = 0;
+    eleSize: number = -1;
+    data: Array<string> = [];
 
-    constructor(buffer : ArrayBuffer, offset : number, eleSize : number) {
+    constructor(buffer: ArrayBuffer, offset: number, eleSize: number) {
         this.buffer = buffer;
         this.offset = offset;
         this.eleSize = eleSize;
@@ -32,4 +32,4 @@ class StringArray implements RelativeIndexable<string>{
     }
 }
 
-export {StringArray};
+export { StringArray };

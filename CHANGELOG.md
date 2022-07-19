@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.10 (2022/07/19)
+
+- Update extension description.
+
 ## 0.0.9 (2022/07/19)
 
 - Feat: support .npz file.

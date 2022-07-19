@@ -1,16 +1,12 @@
 import * as vscode from 'vscode';
 
-
 import { fromArrayBuffer, loadArrayBuffer, loadBuffer } from './numpyParser';
-
 import { Disposable } from './disposable';
 import { OSUtils } from './utils';
 
 type PreviewState = 'Disposed' | 'Visible' | 'Active';
 
-
-
-function toFortranAbsoluteIndex(absoluteIdx : number, shape : number[]) {
+function toFortranAbsoluteIndex(absoluteIdx: number, shape: number[]) {
   // e.g. to C like index  45 for shape (4, 5, 6)
   // [1][2][3] for shape (4, 5, 6) => 1 * (1) + 2 * (1 * 4) + 3 * (1 * 5 * 4)
 
@@ -23,30 +19,30 @@ function toFortranAbsoluteIndex(absoluteIdx : number, shape : number[]) {
 
   for (var i = 0; i < shape.length; i++) {
     // cLikeIdx.push(absoluteIdx % shape[-i]);
-    base /= shape[shape.length-1-i];
-    res += (absoluteIdx % shape[shape.length-1-i]) * base;
-    absoluteIdx = Math.floor(absoluteIdx / shape[shape.length-1-i]);
-  } 
+    base /= shape[shape.length - 1 - i];
+    res += (absoluteIdx % shape[shape.length - 1 - i]) * base;
+    absoluteIdx = Math.floor(absoluteIdx / shape[shape.length - 1 - i]);
+  }
   return res;
 }
 
-function toCLikeArray(array : any, shape : number[]) {
+function toCLikeArray(array: any, shape: number[]) {
   // walk arr
-  var newArray : typeof array = [];
+  var newArray: typeof array = [];
   for (var i = 0; i < array.length; i++) {
     newArray.push(array[toFortranAbsoluteIndex(i, shape)]);
   }
   return newArray;
 }
 
-function wrapWithSqBr(s : string) {
+function wrapWithSqBr(s: string) {
   return '[' + s + ']';
 }
 
-function multiArrayToString (array : any, shape : number[]) {
+function multiArrayToString(array: any, shape: number[]) {
   if (shape.length > 1) {
-    const pieceNum : number = shape[0];
-    const pieceSize : number = array.length / pieceNum;
+    const pieceNum: number = shape[0];
+    const pieceSize: number = array.length / pieceNum;
     var res = new Array(pieceNum);
     for (var i = 0; i < pieceNum; i++) {
       res[i] = multiArrayToString(array[i], shape.slice(1, shape.length));
@@ -58,31 +54,31 @@ function multiArrayToString (array : any, shape : number[]) {
   }
 }
 
-function makeTableHTML(myArray : any) {
+function makeTableHTML(myArray: any) {
   var result = "<table border=''>";
-  for(var i=0; i<myArray.length; i++) {
+  for (var i = 0; i < myArray.length; i++) {
     result += "<tr>";
-    for(var j=0; j<myArray[i].length; j++){
-      result += "<td>"+myArray[i][j]+"</td>";
+    for (var j = 0; j < myArray[i].length; j++) {
+      result += "<td>" + myArray[i][j] + "</td>";
     }
     result += "</tr>";
   }
   result += "</table>";
-  
+
   return result;
 }
 
-function show2DArr(array : any) {
+function show2DArr(array: any) {
   // Show array in an table
   // TODO: prettify it
   const tableHTML = makeTableHTML(array);
   return tableHTML;
 }
 
-function toMultiDimArray(array : any, shape : any) {
+function toMultiDimArray(array: any, shape: any) {
   if (shape.length > 1) {
-    const pieceNum : number = shape[0];
-    const pieceSize : number = array.length / pieceNum;
+    const pieceNum: number = shape[0];
+    const pieceSize: number = array.length / pieceNum;
     var res = new Array(pieceNum);
     for (var i = 0; i < pieceNum; i++) {
       const begin = i * pieceSize;
@@ -96,10 +92,9 @@ function toMultiDimArray(array : any, shape : any) {
   }
 }
 
-function isLargerThanOne(element : any, index : any, array : any) 
-{  
-   return element > 1; 
-} 
+function isLargerThanOne(element: any, index: any, array: any) {
+  return element > 1;
+}
 
 export class NumpyPreview extends Disposable {
   private _previewState: PreviewState = 'Visible';
@@ -189,10 +184,10 @@ export class NumpyPreview extends Disposable {
 
   private getWebviewContents(): string {
     var path = this.resource.path;
-    var content : string = '';
+    var content: string = '';
     switch (OSUtils.isWindows()) {
-      case true: 
-        path = this.resource.path.slice(1, );
+      case true:
+        path = this.resource.path.slice(1,);
         console.log('[+] Windows -> cut path', path);
         break;
       default:
@@ -200,22 +195,23 @@ export class NumpyPreview extends Disposable {
     }
     if (path.endsWith('npz')) {
       // Solve .npz file
+      // comments are taken from https://docs.scipy.org/doc/numpy-1.14.1/neps/npy-format.html#format-specification-version-1-0
+      // For a simple way to combine multiple arrays into a single file, one can use ZipFile to contain multiple “.npy” files. 
+      // We recommend using the file extension “.npz” for these archives.
       var AdmZip = require('adm-zip');
       var zip = new AdmZip(loadBuffer(path));
       var zipEntries = zip.getEntries();
       console.log(`[+] There are ${zipEntries.length} files in .npz file.`);
 
-      var names : Array<string> = [];
-      var buffers : Array<ArrayBuffer> = [];
+      var names: Array<string> = [];
+      var buffers: Array<ArrayBuffer> = [];
 
-      zipEntries.forEach((entry : any) => {
+      zipEntries.forEach((entry: any) => {
         names.push(entry.entryName);
         buffers.push(new Uint8Array(entry.getData()).buffer);
-        // if (entry.entryName.match(/readme/i))
-        //   console.log(zip.readAsText(entry));
       });
-      var contents : Array<string> = [];
-      for (var i=0; i<zipEntries.length; i++) {
+      var contents: Array<string> = [];
+      for (var i = 0; i < zipEntries.length; i++) {
         contents.push(names[i]);
         contents.push(this.bufferToString(buffers[i]));
         content = contents.join(`<p/>`);
@@ -225,9 +221,7 @@ export class NumpyPreview extends Disposable {
       const arrayBuffer = loadArrayBuffer(path);
       content = this.bufferToString(arrayBuffer);
     }
-    
 
-    
     // Replace , with ,\n for reading
     var re = /,/gi;
     content = content.replace(re, `,\n`);
@@ -237,22 +231,22 @@ export class NumpyPreview extends Disposable {
     <meta charset="utf-8">
     </head>`;
     const tail = ['</html>'].join('\n');
-    const output =  head + `<body>              
+    const output = head + `<body>              
     <div id="x">` + content + `</div></body>` + tail;
     return output;
   }
 
-  private bufferToString (arrayBuffer : ArrayBuffer) {
+  private bufferToString(arrayBuffer: ArrayBuffer) {
     var { data: array, shape: arrayShape, order: order } = fromArrayBuffer(arrayBuffer);
-    
-    let tempShape : Array<Number> = arrayShape;
-    var content : string = '';
+
+    let tempShape: Array<Number> = arrayShape;
+    var content: string = '';
     var realShape = tempShape.filter(isLargerThanOne);
     var realDim = realShape.length;
     // Create multi-dim array
     console.log('[+] Array order is', order);
     console.log('[+] Array dim is', realDim);
-  
+
     if (realDim > 1) {
       // For multi dim
       console.log('[*] Process to show structure');
@@ -269,7 +263,7 @@ export class NumpyPreview extends Disposable {
       var multiArr = toMultiDimArray(array, arrayShape);
       switch (arrayShape.length) {
         case 2:
-          
+
           // TODO: import Table View for 2D array
           if (config.get('vscode-numpy-viewer.tableView')) {
             console.log('[*] Table view enabled, create html table');
@@ -282,8 +276,8 @@ export class NumpyPreview extends Disposable {
         default:
           content = multiArrayToString(multiArr, arrayShape);
       }
-    } 
-    else { 
+    }
+    else {
       // For single dim
       content = wrapWithSqBr(array.toString());
     }
