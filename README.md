@@ -15,6 +15,12 @@ Display (binary) .npy or.npz files in VSCode.
 
 Please refer to [CHANGELOG.md](./CHANGELOG.md).
 
+## Other Features
+
+Open table view.
+
+![img](https://github.com/haochengxia/vscode-numpy-viewer/blob/screenshot/screenshot_tableview.gif?raw=true)
+
 ## Reference
 
 - [ludwigschubert/js-numpy-parser](https://github.com/ludwigschubert/js-numpy-parser)

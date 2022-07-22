@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.12 (2022/07/23)
+
+- Feat: support table view for 1D/2D arrays.
+
 ## 0.0.11 (2022/07/19)
 
 - Feat: support bytes and bool array.
