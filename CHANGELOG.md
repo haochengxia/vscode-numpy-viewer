@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.13 (2022/07/23)
+
+- Fix: missing css.
+
 ## 0.0.12 (2022/07/23)
 
 - Feat: support table view for 1D/2D arrays.

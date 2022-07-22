@@ -18,9 +18,7 @@ out/**/*.d.ts
 out/**/*.js.map
 out/*.d.ts
 out/*.js.map
-resources/demo.gif
 src/
-web/
 .eslintrc.json
 .gitignore
 jest.config.js
