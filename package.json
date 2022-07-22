@@ -34,15 +34,35 @@
         ]
       }
     ],
+    "commands": [
+      {
+        "command": "numpy-viewer.openTableView",
+        "title": "Open Table View",
+        "category": "NumpyViewer",
+        "icon": {
+          "light": "./images/table-light.svg",
+          "dark": "./images/table-dark.svg"
+        }
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "when": "resourceExtname == .npy",
+          "command": "numpy-viewer.openTableView",
+          "group": "navigation"
+        },
+        {
+          "when": "resourceExtname == .npz",
+          "command": "numpy-viewer.openTableView",
+          "group": "navigation"
+        }
+      ]
+    },
     "configuration": [
       {
         "title": "vscode-numpy-viewer configuration",
         "properties": {
-          "vscode-numpy-viewer.tableView": {
-            "type": "boolean",
-            "default": false,
-            "description": "Use table view to display 2D array."
-          },
           "vscode-numpy-viewer.fortran2CLikeOrder": {
             "type": "boolean",
             "default": true,
