@@ -54,18 +54,41 @@ function multiArrayToString(array: any, shape: number[]) {
   }
 }
 
-function makeTableHTML(myArray: any) {
-  var result = "<table border=''>";
-  for (var i = 0; i < myArray.length; i++) {
-    result += "<tr>";
-    for (var j = 0; j < myArray[i].length; j++) {
-      result += "<td>" + myArray[i][j] + "</td>";
-    }
-    result += "</tr>";
+function makeTableHTML(myArray : any, style='fixed_headers') {
+  // Get table size
+  const colNum = myArray[0].length;
+  const rowNum = myArray.length;
+  // Add table head, the first column for row ID
+  var colContent = '';
+  for (var i=0; i<colNum; i++) {
+    colContent += `<th>col ${i.toString()}</th>`
   }
-  result += "</table>";
-
-  return result;
+  var tableHead = 
+    `<thead>
+    <tr>
+    <td></td>
+    ${colContent}
+    </tr>
+    </thead>
+    `
+  // Add table body
+  var rowContent = '';
+  for(var i=0; i<rowNum; i++) {
+    var currentRow = `<td>row ${i.toString()}</td>`; // Add row ID
+    for(var j=0; j<myArray[i].length; j++){
+      currentRow += `<td>${myArray[i][j].toString()}</td>`;
+    }
+    rowContent += `<tr>${currentRow}</tr>`;
+  }
+  var tableBody =
+  `<tbody>
+  ${rowContent}
+  </tbody>
+  `
+  return `<table class=${style}>
+  ${tableHead}
+  ${tableBody}
+  </table>`;
 }
 
 function show2DArr(array: any) {
@@ -182,7 +205,7 @@ export class NumpyPreview extends Disposable {
     this._previewState = 'Visible';
   }
 
-  public static getWebviewContents(resourcePath : string, tableViewFlag : boolean): string {
+  public static getWebviewContents(resourcePath : string, tableViewFlag : boolean, tableCss=''): string {
     var path = resourcePath;
     switch (OSUtils.isWindows()) {
       case true: 
@@ -238,8 +261,8 @@ export class NumpyPreview extends Disposable {
   private bufferToString(arrayBuffer: ArrayBuffer) {
     var { data: array, shape: arrayShape, order: order } = fromArrayBuffer(arrayBuffer);
     
-    if (tableViewFlag && arrayShape.length!=2) {
-      return `<div>Not Support Shape</div>`;
+    if (tableViewFlag && arrayShape.length > 2) {
+      return `<div>Table view just support 1D or 2D array now</div>`;
     }
 
     let tempShape : Array<Number> = arrayShape;
@@ -266,7 +289,6 @@ export class NumpyPreview extends Disposable {
       var multiArr = toMultiDimArray(array, arrayShape);
       switch (arrayShape.length) {
         case 2:
-          // TODO: import Table View for 2D array
           if (tableViewFlag) {
             console.log('[*] Table view enabled, create html table');
             content = show2DArr(multiArr);
@@ -281,9 +303,33 @@ export class NumpyPreview extends Disposable {
     }
     else {
       // For single dim
-      content = wrapWithSqBr(array.toString());
+      if (tableViewFlag) {
+        // Support single dim table view
+        var multiArr = toMultiDimArray(array, [realShape[0], 1]);
+        content = show2DArr(multiArr);
+      } else {
+        content = wrapWithSqBr(array.toString());
+      }
     }
-    console.log(content);
-    return content;
+
+    // Introduce css file
+    var resourceLink = '';
+    if (tableCss !== '') {
+      resourceLink = `<link rel="stylesheet" href="${tableCss}">`;
+    }
+
+    // Replace , with ,\n for reading
+    var re = /,/gi;
+    content = content.replace(re, `,\n`);
+    const head = `<!DOCTYPE html>
+    <html dir="ltr" mozdisallowselectionprint>
+    <head>
+    <meta charset="utf-8">
+    ${resourceLink}
+    </head>`;
+    const tail = ['</html>'].join('\n');
+    const output =  head + `<body>              
+    <div id="x">` + content + `</div></body>` + tail;
+    return output;
   }
 }
