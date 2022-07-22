@@ -10,18 +10,14 @@
     padding: 5px;
     text-align: left;
   }
-  .vscode-light .fixed_headers td:nth-child(1),
-  .vscode-light .fixed_headers th:nth-child(1) {
-    min-width: 200px;
-  }
-  .vscode-light .fixed_headers td:nth-child(2),
-  .vscode-light .fixed_headers th:nth-child(2) {
-    min-width: 200px;
-  }
-  .vscode-light .fixed_headers td:nth-child(3),
-  .vscode-light .fixed_headers th:nth-child(3) {
-    width: 350px;
-  }
+  .vscode-light .fixed_headers td:nth-child(odd),
+  .vscode-light .fixed_headers th:nth-child(odd) {
+     min-width: 200px;
+   }
+  .vscode-dark .fixed_headers td:nth-child(even),
+  .vscode-dark .fixed_headers th:nth-child(even) {
+     min-width: 200px;
+   }
   .vscode-light .fixed_headers thead {
     background-color: #333;
     color: #fdfdfd;
@@ -61,17 +57,13 @@
     padding: 5px;
     text-align: left;
   }
- .vscode-dark .fixed_headers td:nth-child(1),
- .vscode-dark .fixed_headers th:nth-child(1) {
+ .vscode-dark .fixed_headers td:nth-child(odd),
+ .vscode-dark .fixed_headers th:nth-child(odd) {
     min-width: 200px;
   }
- .vscode-dark .fixed_headers td:nth-child(2),
- .vscode-dark .fixed_headers th:nth-child(2) {
+ .vscode-dark .fixed_headers td:nth-child(even),
+ .vscode-dark .fixed_headers th:nth-child(even) {
     min-width: 200px;
-  }
- .vscode-dark .fixed_headers td:nth-child(3),
- .vscode-dark .fixed_headers th:nth-child(3) {
-    width: 350px;
   }
  .vscode-dark .fixed_headers thead {
     background-color: #adadad;
