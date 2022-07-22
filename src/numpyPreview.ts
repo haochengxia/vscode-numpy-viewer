@@ -245,6 +245,12 @@ export class NumpyPreview extends Disposable {
       content = this.bufferToString(arrayBuffer, tableViewFlag, tableCss);
     }
 
+    // Introduce css file
+    var resourceLink = '';
+    if (tableCss !== '') {
+      resourceLink = `<link rel="stylesheet" href="${tableCss}">`;
+    }
+
     // Replace , with ,\n for reading
     var re = /,/gi;
     content = content.replace(re, `,\n`);
@@ -252,10 +258,12 @@ export class NumpyPreview extends Disposable {
     <html dir="ltr" mozdisallowselectionprint>
     <head>
     <meta charset="utf-8">
+    ${resourceLink}
     </head>`;
     const tail = ['</html>'].join('\n');
-    const output = head + `<body>              
+    const output =  head + `<body>              
     <div id="x">` + content + `</div></body>` + tail;
+    console.log(output);
     return output;
   }
 
@@ -313,24 +321,6 @@ export class NumpyPreview extends Disposable {
       }
     }
 
-    // Introduce css file
-    var resourceLink = '';
-    if (tableCss !== '') {
-      resourceLink = `<link rel="stylesheet" href="${tableCss}">`;
-    }
-
-    // Replace , with ,\n for reading
-    var re = /,/gi;
-    content = content.replace(re, `,\n`);
-    const head = `<!DOCTYPE html>
-    <html dir="ltr" mozdisallowselectionprint>
-    <head>
-    <meta charset="utf-8">
-    ${resourceLink}
-    </head>`;
-    const tail = ['</html>'].join('\n');
-    const output =  head + `<body>              
-    <div id="x">` + content + `</div></body>` + tail;
-    return output;
+    return content;
   }
 }

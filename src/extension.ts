@@ -39,12 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
 		panel.webview.html = HTML;
 	  }
 
-	const tableViewCommmand = vscode.commands.registerCommand('numpy-viewer.openTableView', openTableView,
-	// () => {
-	// 	vscode.window.showInformationMessage('Table View Mode');
-	// 	// TODO: with this command, open a new editor to show a table to show the data
-	// }
-	);
+	const tableViewCommmand = vscode.commands.registerCommand('numpy-viewer.openTableView', openTableView,);
 	context.subscriptions.push(tableViewCommmand,);
 }
 

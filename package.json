@@ -27,25 +27,33 @@
         "selector": [
           {
             "filenamePattern": "*.npy"
+          },
+          {
+            "filenamePattern": "*.npz"
           }
         ]
       }
     ],
     "commands": [
-			{
-				"command": "numpy-viewer.openTableView",
+      {
+        "command": "numpy-viewer.openTableView",
         "title": "Open Table View",
-				"category": "NumpyViewer",
+        "category": "NumpyViewer",
         "icon": {
           "light": "./images/table-light.svg",
           "dark": "./images/table-dark.svg"
         }
-			}
-		],
+      }
+    ],
     "menus": {
       "editor/title": [
-        { 
+        {
           "when": "resourceExtname == .npy",
+          "command": "numpy-viewer.openTableView",
+          "group": "navigation"
+        },
+        {
+          "when": "resourceExtname == .npz",
           "command": "numpy-viewer.openTableView",
           "group": "navigation"
         }
