@@ -27,25 +27,26 @@
         "selector": [
           {
             "filenamePattern": "*.npy"
-          },
-          {
-            "filenamePattern": "*.npz"
           }
         ]
       }
     ],
     "commands": [
 			{
-				"command": "numpy-viewer.createTableView",
+				"command": "numpy-viewer.openTableView",
+        "title": "Open Table View",
 				"category": "NumpyViewer",
-				"title": "Table View"
+        "icon": {
+          "light": "./images/table-light.svg",
+          "dark": "./images/table-dark.svg"
+        }
 			}
 		],
     "menus": {
       "editor/title": [
         { 
           "when": "resourceExtname == .npy",
-          "command": "numpy-viewer.createTableView",
+          "command": "numpy-viewer.openTableView",
           "group": "navigation"
         }
       ]
@@ -54,11 +55,6 @@
       {
         "title": "vscode-numpy-viewer configuration",
         "properties": {
-          "vscode-numpy-viewer.tableView": {
-            "type": "boolean",
-            "default": false,
-            "description": "Use table view to display 2D array."
-          },
           "vscode-numpy-viewer.fortran2CLikeOrder": {
             "type": "boolean",
             "default": true,

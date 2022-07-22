@@ -160,7 +160,7 @@ export class NumpyPreview extends Disposable {
       })
     );
 
-    this.webviewEditor.webview.html = this.getWebviewContents();
+    this.webviewEditor.webview.html = NumpyPreview.getWebviewContents(this.resource.path, false);
     this.update();
   }
 
@@ -182,12 +182,11 @@ export class NumpyPreview extends Disposable {
     this._previewState = 'Visible';
   }
 
-  private getWebviewContents(): string {
-    var path = this.resource.path;
-    var content: string = '';
+  public static getWebviewContents(resourcePath : string, tableViewFlag : boolean): string {
+    var path = resourcePath;
     switch (OSUtils.isWindows()) {
-      case true:
-        path = this.resource.path.slice(1,);
+      case true: 
+        path = path.slice(1, );
         console.log('[+] Windows -> cut path', path);
         break;
       default:
@@ -238,9 +237,13 @@ export class NumpyPreview extends Disposable {
 
   private bufferToString(arrayBuffer: ArrayBuffer) {
     var { data: array, shape: arrayShape, order: order } = fromArrayBuffer(arrayBuffer);
+    
+    if (tableViewFlag && arrayShape.length!=2) {
+      return `<div>Not Support Shape</div>`;
+    }
 
-    let tempShape: Array<Number> = arrayShape;
-    var content: string = '';
+    let tempShape : Array<Number> = arrayShape;
+    var content : string = '';
     var realShape = tempShape.filter(isLargerThanOne);
     var realDim = realShape.length;
     // Create multi-dim array
@@ -264,7 +267,7 @@ export class NumpyPreview extends Disposable {
       switch (arrayShape.length) {
         case 2:
           // TODO: import Table View for 2D array
-          if (config.get('vscode-numpy-viewer.tableView')) {
+          if (tableViewFlag) {
             console.log('[*] Table view enabled, create html table');
             content = show2DArr(multiArr);
           }

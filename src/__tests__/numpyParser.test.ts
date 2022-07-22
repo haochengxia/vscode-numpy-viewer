@@ -1,4 +1,5 @@
 'use strict';
+
 import { fromArrayBuffer } from "../numpyParser";
 
 describe('fromArrayBuffer()', () => {
