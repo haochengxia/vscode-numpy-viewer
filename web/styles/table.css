@@ -1,0 +1,102 @@
+.vscode-light .fixed_headers {
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+  .vscode-light .fixed_headers th {
+    text-decoration: underline;
+  }
+  .vscode-light .fixed_headers th,
+  .vscode-light .fixed_headers td {
+    padding: 5px;
+    text-align: left;
+  }
+  .vscode-light .fixed_headers td:nth-child(1),
+  .vscode-light .fixed_headers th:nth-child(1) {
+    min-width: 200px;
+  }
+  .vscode-light .fixed_headers td:nth-child(2),
+  .vscode-light .fixed_headers th:nth-child(2) {
+    min-width: 200px;
+  }
+  .vscode-light .fixed_headers td:nth-child(3),
+  .vscode-light .fixed_headers th:nth-child(3) {
+    width: 350px;
+  }
+  .vscode-light .fixed_headers thead {
+    background-color: #333;
+    color: #fdfdfd;
+  }
+  .vscode-light .fixed_headers thead tr {
+    display: block;
+    position: relative;
+  }
+  .vscode-light .fixed_headers tbody {
+    display: block;
+    overflow: auto;
+    width: 100%;
+    height: 300px;
+  }
+  .vscode-light .fixed_headers tbody tr:nth-child(even) {
+    background-color: #ddd;
+  }
+  .old_ie_wrapper {
+    height: 300px;
+    width: 750px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .old_ie_wrapper tbody {
+    height: auto;
+  }
+
+ .vscode-dark .fixed_headers {
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+ .vscode-dark .fixed_headers th {
+    text-decoration: underline;
+  }
+ .vscode-dark .fixed_headers th,
+ .vscode-dark .fixed_headers td {
+    padding: 5px;
+    text-align: left;
+  }
+ .vscode-dark .fixed_headers td:nth-child(1),
+ .vscode-dark .fixed_headers th:nth-child(1) {
+    min-width: 200px;
+  }
+ .vscode-dark .fixed_headers td:nth-child(2),
+ .vscode-dark .fixed_headers th:nth-child(2) {
+    min-width: 200px;
+  }
+ .vscode-dark .fixed_headers td:nth-child(3),
+ .vscode-dark .fixed_headers th:nth-child(3) {
+    width: 350px;
+  }
+ .vscode-dark .fixed_headers thead {
+    background-color: #adadad;
+    color: #333;
+  }
+ .vscode-dark .fixed_headers thead tr {
+    display: block;
+    position: relative;
+  }
+ .vscode-dark .fixed_headers tbody {
+    display: block;
+    overflow: auto;
+    width: 100%;
+    height: 300px;
+  }
+ .vscode-dark .fixed_headers tbody tr:nth-child(even) {
+    background-color: #555;
+  }
+  .old_ie_wrapper {
+    height: 300px;
+    width: 750px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .old_ie_wrapper tbody {
+    height: auto;
+  }
+  
