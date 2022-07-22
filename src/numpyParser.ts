@@ -111,6 +111,7 @@ export function fromArrayBuffer(buffer : ArrayBuffer) {
       var stringArray = new StringArray(buffer, reader.offset, stringArrEleSize);
       data = stringArray.data;
     } else {
+      // console.log(reader.offset)
       data = new constructor(buffer, reader.offset);
     }
 

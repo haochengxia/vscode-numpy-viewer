@@ -33,16 +33,20 @@
     ],
     "commands": [
 			{
-				"command": "numpy-viewer.createTableView",
+				"command": "numpy-viewer.openTableView",
+        "title": "Open Table View",
 				"category": "NumpyViewer",
-				"title": "Table View"
+        "icon": {
+          "light": "./images/table-light.svg",
+          "dark": "./images/table-dark.svg"
+        }
 			}
 		],
     "menus": {
       "editor/title": [
         { 
           "when": "resourceExtname == .npy",
-          "command": "numpy-viewer.createTableView",
+          "command": "numpy-viewer.openTableView",
           "group": "navigation"
         }
       ]
@@ -51,11 +55,6 @@
       {
         "title": "vscode-numpy-viewer configuration",
         "properties": {
-          "vscode-numpy-viewer.tableView": {
-            "type": "boolean",
-            "default": false,
-            "description": "Use table view to display 2D array."
-          },
           "vscode-numpy-viewer.fortran2CLikeOrder": {
             "type": "boolean",
             "default": true,
@@ -105,7 +104,7 @@
     ],
     "coverageDirectory": "./coverage/"
   },
-  "dependencies": {},
+  "dependencies": {"vscode-nls-dev": "^4.0.0"},
   "devDependencies": {
     "@swc/core": "^1.2.183",
     "@swc/jest": "^0.2.21",
@@ -136,6 +135,7 @@
     "jest": "27.4.5",
     "tslib": "^2.0.3",
     "typescript": "^4.7.2",
-    "vscode-languageserver": "7.0.0"
+    "vscode-languageserver": "7.0.0",
+    "vscode-nls-dev": "^4.0.0"
   }
 }
