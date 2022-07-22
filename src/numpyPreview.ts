@@ -206,6 +206,7 @@ export class NumpyPreview extends Disposable {
   }
 
   public static getWebviewContents(resourcePath : string, tableViewFlag : boolean, tableCss=''): string {
+    var content: string = '';
     var path = resourcePath;
     switch (OSUtils.isWindows()) {
       case true: 
@@ -235,13 +236,13 @@ export class NumpyPreview extends Disposable {
       var contents: Array<string> = [];
       for (var i = 0; i < zipEntries.length; i++) {
         contents.push(names[i]);
-        contents.push(this.bufferToString(buffers[i]));
+        contents.push(this.bufferToString(buffers[i], tableViewFlag, tableCss));
         content = contents.join(`<p/>`);
       }
     }
     else {
       const arrayBuffer = loadArrayBuffer(path);
-      content = this.bufferToString(arrayBuffer);
+      content = this.bufferToString(arrayBuffer, tableViewFlag, tableCss);
     }
 
     // Replace , with ,\n for reading
@@ -258,7 +259,7 @@ export class NumpyPreview extends Disposable {
     return output;
   }
 
-  private bufferToString(arrayBuffer: ArrayBuffer) {
+  private static bufferToString(arrayBuffer: ArrayBuffer, tableViewFlag : boolean, tableCss : string) {
     var { data: array, shape: arrayShape, order: order } = fromArrayBuffer(arrayBuffer);
     
     if (tableViewFlag && arrayShape.length > 2) {
