@@ -2,7 +2,7 @@
 
 ## 0.0.14 (2022/07/23)
 
-- Fix: small change on table style.
+- Fix: small change on table style (fix the inconsistent width in vscode-light). 
 
 ## 0.0.13 (2022/07/23)
 
