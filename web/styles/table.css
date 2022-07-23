@@ -1,3 +1,4 @@
+/* light style */
 .vscode-light .fixed_headers {
     table-layout: fixed;
     border-collapse: collapse;
@@ -10,13 +11,14 @@
     padding: 5px;
     text-align: left;
   }
-  .vscode-light .fixed_headers td:nth-child(odd),
-  .vscode-light .fixed_headers th:nth-child(odd) {
+  .vscode-light .fixed_headers td,
+  .vscode-light .fixed_headers th {
      min-width: 200px;
    }
-  .vscode-dark .fixed_headers td:nth-child(even),
-  .vscode-dark .fixed_headers th:nth-child(even) {
-     min-width: 200px;
+   /* row ID width can be small */
+   .vscode-light .fixed_headers td:nth-child(1),
+   .vscode-light .fixed_headers th:nth-child(1) {
+     min-width: 50px;
    }
   .vscode-light .fixed_headers thead {
     background-color: #333;
@@ -30,7 +32,7 @@
     display: block;
     overflow: auto;
     width: 100%;
-    height: 300px;
+    height: auto;
   }
   .vscode-light .fixed_headers tbody tr:nth-child(even) {
     background-color: #ddd;
@@ -45,6 +47,7 @@
     height: auto;
   }
 
+/* dark style */
  .vscode-dark .fixed_headers {
     table-layout: fixed;
     border-collapse: collapse;
@@ -57,13 +60,14 @@
     padding: 5px;
     text-align: left;
   }
- .vscode-dark .fixed_headers td:nth-child(odd),
- .vscode-dark .fixed_headers th:nth-child(odd) {
+ .vscode-dark .fixed_headers td,
+ .vscode-dark .fixed_headers th {
     min-width: 200px;
   }
- .vscode-dark .fixed_headers td:nth-child(even),
- .vscode-dark .fixed_headers th:nth-child(even) {
-    min-width: 200px;
+   /* row ID width can be small */
+  .vscode-dark .fixed_headers td:nth-child(1),
+  .vscode-dark .fixed_headers th:nth-child(1) {
+     min-width: 50px;
   }
  .vscode-dark .fixed_headers thead {
     background-color: #adadad;
@@ -77,7 +81,7 @@
     display: block;
     overflow: auto;
     width: 100%;
-    height: 300px;
+    height: auto;
   }
  .vscode-dark .fixed_headers tbody tr:nth-child(even) {
     background-color: #555;
