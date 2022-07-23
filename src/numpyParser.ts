@@ -8,8 +8,6 @@ import { StringArray } from './type/stringArray';
 
 var stringArrEleSize = -1;
 var bytesArrEleSize = -1;
-const MAX_OUTPUT_BOOL_LIMIT = 10000;
-// const MAX_ARR_LIMIT = 1000000;
 
 export function loadArrayBuffer(file: string) {
   const buffer = fs.readFileSync(file);
@@ -137,12 +135,6 @@ export function fromArrayBuffer(buffer: ArrayBuffer) {
     default:
       data = new constructor(buffer, reader.offset);
   }
-  // if (constructor === String) {
-  //   var stringArray = new StringArray(buffer, reader.offset, stringArrEleSize);
-  //   data = stringArray.data;
-  // } else {
-  //   data = new constructor(buffer, reader.offset);
-  // }
 
   // Return object with same signature as NDArray expects: {data, shape}
   return { data: data, shape: header.shape, order: order };

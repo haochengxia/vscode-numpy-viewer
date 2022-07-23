@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.14 (2022/07/23)
+
+- Fix: small change on table style.
+
 ## 0.0.13 (2022/07/23)
 
 - Fix: missing css.

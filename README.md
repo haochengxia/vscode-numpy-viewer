@@ -17,9 +17,8 @@ Please refer to [CHANGELOG.md](./CHANGELOG.md).
 
 ## Other Features
 
-Open table view.
-
-![img](https://github.com/haochengxia/vscode-numpy-viewer/blob/screenshot/screenshot_tableview.gif?raw=true)
+- [x] Table view for 2D/1D array. [[see gif]](https://github.com/haochengxia/vscode-numpy-viewer/blob/screenshot/screenshot_tableview.gif?raw=true)
+- [ ] Array slice. (In progress)
 
 ## Reference
 
