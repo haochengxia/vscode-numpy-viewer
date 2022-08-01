@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import { BytesArray } from './type/bytesArray';
 import { BoolArray } from './type/boolArray';
 import { StringArray } from './type/stringArray';
+import { ObjectArray } from './type/objectArray';
 
 var stringArrEleSize = -1;
 var bytesArrEleSize = -1;
@@ -132,6 +133,11 @@ export function fromArrayBuffer(buffer: ArrayBuffer) {
       //   console.log('[+] true and false have been replaced with numbers');
       // }
       break;
+    case Map:
+      // Solve dict tyoe data
+      var objectArray = new ObjectArray(buffer, reader.offset);
+      data = objectArray.data;
+      break;
     default:
       data = new constructor(buffer, reader.offset);
   }
@@ -167,6 +173,9 @@ function typedArrayConstructorForDescription(dtypeDescription: string) {
      https://github.com/numpy/numpy/blob/8aa121415760cc6839a546c3f84e238d1dfa1aa6/numpy/core/_dtype.py#L13
    */
   switch (dtypeDescription) {
+    // dict
+    case '|O':
+      return Map;
 
     // Unsigned Integers
     case '|u1':

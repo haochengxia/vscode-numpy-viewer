@@ -22,3 +22,4 @@ src/
 .eslintrc.json
 .gitignore
 jest.config.js
+*.txt
