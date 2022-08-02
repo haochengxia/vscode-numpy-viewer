@@ -170,6 +170,10 @@ export class NumpyPreview extends Disposable {
     console.log('[+] Array order is', order);
     console.log('[+] Array dim is', realDim);
 
+    if (realDim == 0) {
+      return array.toString();
+    }
+
     if (realDim > 1) {
       // For multi dim
       console.log('[*] Process to show structure');

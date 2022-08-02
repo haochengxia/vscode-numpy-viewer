@@ -10,15 +10,18 @@
 // 00000080: ffff ff4b 3f74 9462 895d 947d 9428 8c01  ...K?t.b.].}.(..
 // 00000090: 6194 4b01 8c01 6294 4b02 7561 7494 622e  a.K...b.K.uat.b.
 
+// https://github.com/numpy/numpy/blob/918065167a3860c97d52d6292f206101d660be6f/numpy/lib/format.py#L678
+// pickle.dump(array, fp, protocol=3, **pickle_kwargs)
+
 class ObjectArray implements RelativeIndexable<string>{
     buffer: ArrayBuffer;
     offset: number = 0;
-    eleSize: number = -1;
     data: Array<string> = [];
 
     constructor(buffer: ArrayBuffer, offset: number) {
         this.buffer = buffer;
         this.offset = offset;
+        this.data.push('Unable to show a serialized python object.')
     }
 
     at(index: number): string | undefined {

@@ -173,8 +173,8 @@ function typedArrayConstructorForDescription(dtypeDescription: string) {
      https://github.com/numpy/numpy/blob/8aa121415760cc6839a546c3f84e238d1dfa1aa6/numpy/core/_dtype.py#L13
    */
   switch (dtypeDescription) {
-    // dict
-    case '|O':
+    // Python object
+    case '|o':
       return Map;
 
     // Unsigned Integers
