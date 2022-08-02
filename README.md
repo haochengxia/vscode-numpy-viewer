@@ -7,7 +7,7 @@
 
 > ! Displaying very large arrays (e.g., size > 10,000,000) is not currently supported.
 
-Display (binary) .npy or.npz files in VSCode.
+Display (binary) `.npy` or `.npz` files in VSCode.
 
 ![img](https://github.com/haochengxia/vscode-numpy-viewer/blob/screenshot/screenshot.gif?raw=true)
 

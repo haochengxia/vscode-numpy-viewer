@@ -21,7 +21,7 @@ class ObjectArray implements RelativeIndexable<string>{
     constructor(buffer: ArrayBuffer, offset: number) {
         this.buffer = buffer;
         this.offset = offset;
-        this.data.push('Unable to show a serialized python object.')
+        this.data.push('Unable to show a serialized python object.');
     }
 
     at(index: number): string | undefined {

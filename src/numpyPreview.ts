@@ -170,7 +170,7 @@ export class NumpyPreview extends Disposable {
     console.log('[+] Array order is', order);
     console.log('[+] Array dim is', realDim);
 
-    if (realDim == 0) {
+    if (realDim === 0) {
       return array.toString();
     }
 
