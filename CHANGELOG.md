@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.1.0 (2022/08/02)
+
+- Feat: Add unsupport notification for python object array.
+
 ## 0.0.14 (2022/07/23)
 
-- Fix: small change on table style (fix the inconsistent width in vscode-light). 
+- Fix: small change on table style (fix the inconsistent width in vscode-light).
 
 ## 0.0.13 (2022/07/23)
 
