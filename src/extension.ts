@@ -37,10 +37,22 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 		// console.log(HTML);
 		panel.webview.html = HTML;
-	  }
+	}
 
 	const tableViewCommmand = vscode.commands.registerCommand('numpy-viewer.openTableView', openTableView,);
 	context.subscriptions.push(tableViewCommmand,);
+
+
+	function showArrayShape(uri?: vscode.Uri) {
+		var shape_info = '';
+		if (uri instanceof vscode.Uri) {
+			shape_info = NumpyPreview.getWebviewContents(uri.path, true, '', true);
+		}
+		vscode.window.showInformationMessage(`Shape info: ${shape_info}`);
+	}
+
+	const arrayShapeCommmand = vscode.commands.registerCommand('numpy-viewer.showArrayShape', showArrayShape,);
+	context.subscriptions.push(arrayShapeCommmand,);
 }
 
 // this method is called when your extension is deactivated

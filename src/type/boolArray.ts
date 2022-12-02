@@ -17,7 +17,6 @@ class BoolArray implements RelativeIndexable<boolean>{
             } else {
                 this.data.push(false);
             }
-            
         });
     }
 

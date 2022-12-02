@@ -6,7 +6,6 @@ import { OSUtils, isLargerThanOne, toCLikeArray, toMultiDimArray, show2DArr, mul
 
 type PreviewState = 'Disposed' | 'Visible' | 'Active';
 
-
 export class NumpyPreview extends Disposable {
   private _previewState: PreviewState = 'Visible';
 
@@ -70,7 +69,7 @@ export class NumpyPreview extends Disposable {
         }
       })
     );
-
+    
     this.webviewEditor.webview.html = NumpyPreview.getWebviewContents(this.resource.path, false);
     this.update();
   }
@@ -93,12 +92,13 @@ export class NumpyPreview extends Disposable {
     this._previewState = 'Visible';
   }
 
-  public static getWebviewContents(resourcePath : string, tableViewFlag : boolean, tableCss=''): string {
+  public static getWebviewContents(resourcePath: string, tableViewFlag: boolean, tableCss = '', shapeFlag=false): string {
     var content: string = '';
+    var shape: string = '';
     var path = resourcePath;
     switch (OSUtils.isWindows()) {
-      case true: 
-        path = path.slice(1, );
+      case true:
+        path = path.slice(1,);
         console.log('[+] Windows -> cut path', path);
         break;
       default:
@@ -126,11 +126,17 @@ export class NumpyPreview extends Disposable {
         contents.push(names[i]);
         contents.push(this.bufferToString(buffers[i], tableViewFlag, tableCss));
         content = contents.join(`<p/>`);
+        shape += `${names[i]} (${fromArrayBuffer(buffers[i]).shape}) `
       }
     }
     else {
       const arrayBuffer = loadArrayBuffer(path);
       content = this.bufferToString(arrayBuffer, tableViewFlag, tableCss);
+      shape += `(${fromArrayBuffer(arrayBuffer).shape}) `
+    }
+
+    if (shapeFlag) {
+      return shape;
     }
 
     // Introduce css file
@@ -149,21 +155,21 @@ export class NumpyPreview extends Disposable {
     ${resourceLink}
     </head>`;
     const tail = ['</html>'].join('\n');
-    const output =  head + `<body>              
+    const output = head + `<body>              
     <div id="x">` + content + `</div></body>` + tail;
     console.log(output);
     return output;
   }
 
-  private static bufferToString(arrayBuffer: ArrayBuffer, tableViewFlag : boolean, tableCss : string) {
+  private static bufferToString(arrayBuffer: ArrayBuffer, tableViewFlag: boolean, tableCss: string) {
     var { data: array, shape: arrayShape, order: order } = fromArrayBuffer(arrayBuffer);
-    
+
     if (tableViewFlag && arrayShape.length > 2) {
       return `<div>Table view just support 1D or 2D array now</div>`;
     }
 
-    let tempShape : Array<Number> = arrayShape;
-    var content : string = '';
+    let tempShape: Array<Number> = arrayShape;
+    var content: string = '';
     var realShape = tempShape.filter(isLargerThanOne);
     var realDim = realShape.length;
     // Create multi-dim array

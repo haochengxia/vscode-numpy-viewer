@@ -3,7 +3,7 @@
   "displayName": "vscode-numpy-viewer",
   "description": "Display (binary) .npy or .npz files in VSCode.",
   "publisher": "Percy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.68.0"
@@ -43,6 +43,15 @@
           "light": "./images/table-light.svg",
           "dark": "./images/table-dark.svg"
         }
+      },
+      {
+        "command": "numpy-viewer.showArrayShape",
+        "title": "Show Array Shape",
+        "category": "NumpyViewer",
+        "icon": {
+          "light": "./images/shape-light.svg",
+          "dark": "./images/shape-dark.svg"
+        }
       }
     ],
     "menus": {
@@ -55,6 +64,16 @@
         {
           "when": "resourceExtname == .npz",
           "command": "numpy-viewer.openTableView",
+          "group": "navigation"
+        },
+        {
+          "when": "resourceExtname == .npy",
+          "command": "numpy-viewer.showArrayShape",
+          "group": "navigation"
+        },
+        {
+          "when": "resourceExtname == .npz",
+          "command": "numpy-viewer.showArrayShape",
           "group": "navigation"
         }
       ]

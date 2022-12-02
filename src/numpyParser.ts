@@ -134,7 +134,7 @@ export function fromArrayBuffer(buffer: ArrayBuffer) {
       // }
       break;
     case Map:
-      // Solve dict tyoe data
+      // Solve dict type data
       var objectArray = new ObjectArray(buffer, reader.offset);
       data = objectArray.data;
       break;
@@ -219,11 +219,11 @@ function typedArrayConstructorForDescription(dtypeDescription: string) {
         return String;
       }
       if (dtypeDescription.startsWith('|bytes')) {
-          const size = parseInt(dtypeDescription.slice(6));
-          console.log('[+] Bytes Array, element size is', size);
-          bytesArrEleSize = size;
-          // TODO change it, temp use this to identify
-          return Number;
+        const size = parseInt(dtypeDescription.slice(6));
+        console.log('[+] Bytes Array, element size is', size);
+        bytesArrEleSize = size;
+        // TODO change it, temp use this to identify
+        return Number;
       }
       throw new Error('Unknown or not yet implemented numpy dtype description: ' + dtypeDescription);
   }
