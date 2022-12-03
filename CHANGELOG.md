@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 (2022/12/02)
+
+- Feat: Add a command to show array shape.
+
 ## 0.1.0 (2022/08/02)
 
 - Feat: Add unsupport notification for python object array.
