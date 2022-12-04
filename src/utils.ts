@@ -80,6 +80,19 @@ export function multiArrayToString(array: any, shape: number[]) {
     }
 }
 
+export function contentFormatting(content: string, sl: number) {    
+    var res = content;
+    for (var i = 0; i < sl-1; i++) {
+        // Break line
+        var reg = new RegExp("\\]{" + (sl - 1 - i) + "},", "g");
+        res = res.replace(reg, "$&<br/>");
+        // Add indent (?<!\[)\[{1}(?!\[)
+        var reg = new RegExp("(?<!\\[)\\[{" + (sl - 1 - i) + "}(?!\\[)", "g");
+        res = res.replace(reg, "&nbsp".repeat(i + 1) + "$&");
+    }
+    return res;
+}
+
 export function makeTableHTML(myArray: any, style = 'fixed_headers') {
     // Get table size
     const colNum = myArray[0].length;

@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import { fromArrayBuffer, loadArrayBuffer, loadBuffer } from './numpyParser';
 import { Disposable } from './disposable';
-import { OSUtils, isLargerThanOne, toCLikeArray, toMultiDimArray, show2DArr, multiArrayToString, wrapWithSqBr } from './utils';
+import { OSUtils, isLargerThanOne, toCLikeArray, toMultiDimArray, show2DArr, multiArrayToString, wrapWithSqBr, contentFormatting } from './utils';
 
 type PreviewState = 'Disposed' | 'Visible' | 'Active';
 
@@ -124,14 +124,22 @@ export class NumpyPreview extends Disposable {
       var contents: Array<string> = [];
       for (var i = 0; i < zipEntries.length; i++) {
         contents.push(names[i]);
-        contents.push(this.bufferToString(buffers[i], tableViewFlag, tableCss));
-        content = contents.join(`<p/>`);
+        var {content: temp_content, shapeLength: sl}=  this.bufferToString(buffers[i], tableViewFlag, tableCss);
+        if (sl >= 2) {
+          temp_content = contentFormatting(temp_content, sl);
+        }
+        contents.push(temp_content);
         shape += `${names[i]} (${fromArrayBuffer(buffers[i]).shape}) `
       }
+      content = contents.join(`<p/>`);
     }
     else {
       const arrayBuffer = loadArrayBuffer(path);
-      content = this.bufferToString(arrayBuffer, tableViewFlag, tableCss);
+      var {content: temp_content, shapeLength: sl}=  this.bufferToString(arrayBuffer, tableViewFlag, tableCss);
+      if (sl >= 2) {
+        temp_content = contentFormatting(temp_content, sl);
+      }
+      content = temp_content;
       shape += `(${fromArrayBuffer(arrayBuffer).shape}) `
     }
 
@@ -156,7 +164,9 @@ export class NumpyPreview extends Disposable {
     </head>`;
     const tail = ['</html>'].join('\n');
     const output = head + `<body>              
-    <div id="x">` + content + `</div></body>` + tail;
+    <div id="x" style='font-family: Menlo, Consolas, "Ubuntu Mono",
+    "Roboto Mono", "DejaVu Sans Mono",
+    monospace'>` + content + `</div></body>` + tail;
     console.log(output);
     return output;
   }
@@ -165,7 +175,7 @@ export class NumpyPreview extends Disposable {
     var { data: array, shape: arrayShape, order: order } = fromArrayBuffer(arrayBuffer);
 
     if (tableViewFlag && arrayShape.length > 2) {
-      return `<div>Table view just support 1D or 2D array now</div>`;
+      return {content: `<div>Table view just support 1D or 2D array now</div>`, shapeLength: 0};
     }
 
     let tempShape: Array<Number> = arrayShape;
@@ -177,7 +187,7 @@ export class NumpyPreview extends Disposable {
     console.log('[+] Array dim is', realDim);
 
     if (realDim === 0) {
-      return array.toString();
+      return {content: array.toString(), shapeLength: arrayShape.length};
     }
 
     if (realDim > 1) {
@@ -219,6 +229,6 @@ export class NumpyPreview extends Disposable {
       }
     }
 
-    return content;
+    return {content: content, shapeLength: arrayShape.length};
   }
 }
