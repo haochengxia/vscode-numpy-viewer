@@ -86,6 +86,11 @@
             "type": "boolean",
             "default": true,
             "description": "Convert fortran array to C like array otherwise just output the transposed array. e.g. [[1, 2, 3], [4, 5, 6]] if true, output is [[1, 2, 3], [4, 5, 6]], otherwise output is [[1, 4], [2, 5], [3, 6]]."
+          },
+          "vscode-numpy-viewer.printPrecision": {
+            "type": "integer",
+            "default": 6,
+            "description": "Set the print precision for the numbers in array."
           }
         }
       }

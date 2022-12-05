@@ -154,7 +154,7 @@ function parseHeaderStr(headerStr: string) {
     .replace('S', 'bytes')
     .toLowerCase() // boolean literals: False -> false
     .replace('(', '[').replace('),', ']') // Python tuple to JS array: (10,) -> [10,]
-    .replace('[,', '[1,]').replace(',]', ',1]') // implicit dimensions: [10,] -> [10,1]
+    .replace('[,', '[1,]').replace(',]', ']') // implicit dimensions: [10,] -> [10]
     .replace(/'/g, '"'); // single quotes -> double quotes
   // console.log(jsonHeader);
   return JSON.parse(jsonHeader);
