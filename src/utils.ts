@@ -145,7 +145,12 @@ export function toMultiDimArray(array: any, shape: any) {
         for (var i = 0; i < pieceNum; i++) {
             const begin = i * pieceSize;
             const end = array.length - (pieceNum - i - 1) * pieceSize;
-            res[i] = toMultiDimArray(array.slice(begin, end), shape.slice(1, shape.length));
+            if (pieceSize != 1) {
+                res[i] = toMultiDimArray(array.slice(begin, end), shape.slice(1, shape.length));
+            } else {
+                res[i] = new Array([toMultiDimArray(array.slice(begin, end), shape.slice(1, shape.length))]);
+            }
+            
         }
         return res;
     }

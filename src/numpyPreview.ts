@@ -178,19 +178,16 @@ export class NumpyPreview extends Disposable {
       return {content: `<div>Table view just support 1D or 2D array now</div>`, shapeLength: 0};
     }
 
-    let tempShape: Array<Number> = arrayShape;
     var content: string = '';
-    var realShape = tempShape.filter(isLargerThanOne);
-    var realDim = realShape.length;
     // Create multi-dim array
     console.log('[+] Array order is', order);
-    console.log('[+] Array dim is', realDim);
+    console.log('[+] Array shape is', arrayShape);
 
-    if (realDim === 0) {
+    if (arrayShape.length === 0) {
       return {content: array.toString(), shapeLength: arrayShape.length};
     }
 
-    if (realDim > 1) {
+    if (arrayShape.length > 1) {
       // For multi dim
       console.log('[*] Process to show structure');
       let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration();
@@ -198,10 +195,9 @@ export class NumpyPreview extends Disposable {
         // Process to get C-like array
         // TODO: optim performance
         array = toCLikeArray(array, arrayShape);
-      } else {
-        // Just reverse the shape, output a transposed c-like array
+        // Just reverse the shape to match new c-like array
         arrayShape = arrayShape.reverse();
-      }
+      } 
 
       var multiArr = toMultiDimArray(array, arrayShape);
       switch (arrayShape.length) {
@@ -222,7 +218,7 @@ export class NumpyPreview extends Disposable {
       // For single dim
       if (tableViewFlag) {
         // Support single dim table view
-        var multiArr = toMultiDimArray(array, [realShape[0], 1]);
+        var multiArr = toMultiDimArray(array, [arrayShape[0], 1]);
         content = show2DArr(multiArr);
       } else {
         content = wrapWithSqBr(array.toString());
