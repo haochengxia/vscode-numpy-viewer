@@ -191,12 +191,16 @@ export class NumpyPreview extends Disposable {
       // For multi dim
       console.log('[*] Process to show structure');
       let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration();
-      if (order === 'F' && config.get('vscode-numpy-viewer.fortran2CLikeOrder')) {
-        // Process to get C-like array
-        // TODO: optim performance
-        array = toCLikeArray(array, arrayShape);
-        // Just reverse the shape to match new c-like array
-        arrayShape = arrayShape.reverse();
+      if (order === 'F') {
+        if (config.get('vscode-numpy-viewer.fortran2CLikeOrder')) {
+          // Process to get C-like array
+          // TODO: optim performance
+          array = toCLikeArray(array, arrayShape);
+          // Shape is correct, so we do not need to reverse
+        } else {
+          // Do not transform to c-like array, just reverse the shape
+          arrayShape = arrayShape.reverse();
+        }
       } 
 
       var multiArr = toMultiDimArray(array, arrayShape);
