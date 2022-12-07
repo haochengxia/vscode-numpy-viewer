@@ -3,7 +3,7 @@
   "displayName": "vscode-numpy-viewer",
   "description": "Display (binary) .npy or .npz files in VSCode.",
   "publisher": "Percy",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.68.0"
@@ -13,6 +13,8 @@
     "url": "https://github.com/haochengxia/vscode-numpy-viewer.git"
   },
   "categories": [
+    "Data Science",
+    "Visualization",
     "Other"
   ],
   "activationEvents": [

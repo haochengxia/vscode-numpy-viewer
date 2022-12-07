@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4 (2022/12/07)
+
+- Change extension categories.
+
 ## 0.1.3 (2022/12/07)
 
 - Fix: shape for Fortran order array.
