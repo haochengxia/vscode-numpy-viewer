@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5 (2023/01/05)
+
+- Support complex number.
+
 ## 0.1.4 (2022/12/07)
 
 - Change extension categories.

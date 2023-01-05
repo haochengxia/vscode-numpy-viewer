@@ -6,6 +6,7 @@ import { BytesArray } from './type/bytesArray';
 import { BoolArray } from './type/boolArray';
 import { StringArray } from './type/stringArray';
 import { ObjectArray } from './type/objectArray';
+import { ComplexArray } from './type/complexArray';
 
 var stringArrEleSize = -1;
 var bytesArrEleSize = -1;
@@ -115,17 +116,21 @@ export function fromArrayBuffer(buffer: ArrayBuffer) {
   }
   // Intepret the bytes according to the specified dtype
   var data;
-  const constructor = typedArrayConstructorForDescription(header.descr);
-  switch (constructor) {
-    case String:
+  const {constructor: ctor, typeDesc: td} = typedArrayConstructorForDescription(header.descr);
+  switch (td) {
+    case 'complex':
+      var complexArray = new ComplexArray(buffer, reader.offset);
+      data = complexArray.data;
+      break;
+    case 'string':
       var stringArray = new StringArray(buffer, reader.offset, stringArrEleSize);
       data = stringArray.data;
       break;
-    case Number:
+    case 'bytes':
       var bytesArray = new BytesArray(buffer, reader.offset, bytesArrEleSize);
       data = bytesArray.data;
       break;
-    case Boolean:
+    case 'bool':
       var boolArray = new BoolArray(buffer, reader.offset);
       data = boolArray.data;
       // if (boolArray.eleNum > MAX_OUTPUT_BOOL_LIMIT) {
@@ -133,13 +138,13 @@ export function fromArrayBuffer(buffer: ArrayBuffer) {
       //   console.log('[+] true and false have been replaced with numbers');
       // }
       break;
-    case Map:
+    case 'python object':
       // Solve dict type data
       var objectArray = new ObjectArray(buffer, reader.offset);
       data = objectArray.data;
       break;
     default:
-      data = new constructor(buffer, reader.offset);
+      data = new ctor(buffer, reader.offset);
   }
 
   // Return object with same signature as NDArray expects: {data, shape}
@@ -175,39 +180,41 @@ function typedArrayConstructorForDescription(dtypeDescription: string) {
   switch (dtypeDescription) {
     // Python object
     case '|o':
-      return Map;
+      return {constructor: String, typeDesc: 'python object'};;
 
     // Unsigned Integers
     case '|u1':
-      return Uint8Array;
+      return {constructor: Uint8Array, typeDesc: 'unsigned int8'};
     case '<u2':
-      return Uint16Array;
+      return {constructor: Uint16Array, typeDesc: 'unsigned int16'};
     case '<u4':
-      return Uint32Array;
+      return {constructor: Uint32Array, typeDesc: 'unsigned int32'};;
     case '<u8':
-      return BigUint64Array;
+      return {constructor: BigUint64Array, typeDesc: 'unsigned int64'};
 
     // Integers
     case '|i1': // "byte"
-      return Int8Array;
+      return {constructor: Int8Array, typeDesc: 'signed int8'};
     case '<i2': // "short"
-      return Int16Array;
+      return {constructor: Int16Array, typeDesc: 'signed int16'};
     case '<i4': // "intc"
-      return Int32Array;
+      return {constructor: Int32Array, typeDesc: 'signed int32'};
     case '<i8': // "longlong" (??)
-      return BigInt64Array;
+      return {constructor: BigInt64Array, typeDesc: 'signed int64'};
 
     // Floating
     case '<f2': // "half"
       throw new Error('Because JavaScript doesn\'t currently include standard support for 16-bit floating point values, support for this dtype is not yet implemented.');
     case '<f4': // "single"
-      return Float32Array;
+      return {constructor: Float32Array, typeDesc: 'float32'};
     case '<f8': // "double" "longfloat"
-      return Float64Array;
+      return {constructor: Float64Array, typeDesc: 'float64'};
 
     case '|b1':
-      return Boolean;
+      return {constructor: Boolean, typeDesc: 'bool'};
 
+    case '<c16':
+      return  {constructor: Float64Array, typeDesc: 'complex'};
     // No support for ComplexFloating, on-number types (flexible/character/void...) yet
 
     default:
@@ -216,14 +223,13 @@ function typedArrayConstructorForDescription(dtypeDescription: string) {
         const size = parseInt(dtypeDescription.slice(4));
         console.log('[+] String Array, element size is', size);
         stringArrEleSize = size;
-        return String;
+        return {constructor: String, typeDesc: 'string'};
       }
       if (dtypeDescription.startsWith('|bytes')) {
         const size = parseInt(dtypeDescription.slice(6));
         console.log('[+] Bytes Array, element size is', size);
         bytesArrEleSize = size;
-        // TODO change it, temp use this to identify
-        return Number;
+        return {constructor: String, typeDesc: 'bytes'};
       }
       throw new Error('Unknown or not yet implemented numpy dtype description: ' + dtypeDescription);
   }
