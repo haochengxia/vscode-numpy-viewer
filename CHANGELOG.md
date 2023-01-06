@@ -3,6 +3,7 @@
 ## 0.1.5 (2023/01/05)
 
 - Support complex number.
+- Reorganize type judgement in parser.
 
 ## 0.1.4 (2022/12/07)
 
