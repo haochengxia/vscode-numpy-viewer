@@ -166,7 +166,9 @@ function parseHeaderStr(headerStr: string) {
 }
 
 
-
+/* TODO: 1. add judgement for big end and little end
+         2. support more types
+*/
 function typedArrayConstructorForDescription(dtypeDescription: string) {
   /* 'dtype' description strings consist of three characters, indicating one of three
      properties each: byte order, data type, and byte length.
