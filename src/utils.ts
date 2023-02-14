@@ -162,3 +162,8 @@ export function toMultiDimArray(array: any, shape: any) {
 export function isLargerThanOne(element: any, index: any, array: any) {
     return element > 1;
 }
+
+export function getOption(option: string) {
+    let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration();
+    return config.get(option);
+}

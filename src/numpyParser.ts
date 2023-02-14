@@ -7,6 +7,7 @@ import { BoolArray } from './type/boolArray';
 import { StringArray } from './type/stringArray';
 import { ObjectArray } from './type/objectArray';
 import { ComplexArray } from './type/complexArray';
+import { getOption } from './utils';
 
 var stringArrEleSize = -1;
 var bytesArrEleSize = -1;
@@ -144,7 +145,24 @@ export function fromArrayBuffer(buffer: ArrayBuffer) {
       data = objectArray.data;
       break;
     default:
+      // Set precision
       data = new ctor(buffer, reader.offset);
+      let precision : number = getOption('vscode-numpy-viewer.printPrecision') as number;
+      if (precision > 0) {
+        console.log(`[+] set precision ${precision}`);
+        switch (ctor) {
+          case Float32Array:
+            data = data as Float32Array;
+            for (var i = 0; i < data.length; i++) data[i] = parseFloat(data[i].toFixed(precision));
+            break;
+          case Float64Array:
+            data = data as Float64Array;
+            for (var i = 0; i < data.length; i++) data[i] = parseFloat(data[i].toFixed(precision));
+            break;
+          default:
+            console.log(`[+] No need for cut`)
+        }
+      }
   }
 
   // Return object with same signature as NDArray expects: {data, shape}
