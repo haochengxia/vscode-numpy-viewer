@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import { fromArrayBuffer, loadArrayBuffer, loadBuffer } from './numpyParser';
 import { Disposable } from './disposable';
-import { OSUtils, isLargerThanOne, toCLikeArray, toMultiDimArray, show2DArr, multiArrayToString, wrapWithSqBr, contentFormatting } from './utils';
+import { OSUtils, toCLikeArray, toMultiDimArray, show2DArr, multiArrayToString, wrapWithSqBr, contentFormatting, getOption, setPrecision } from './utils';
 
 type PreviewState = 'Disposed' | 'Visible' | 'Active';
 
@@ -172,8 +172,8 @@ export class NumpyPreview extends Disposable {
   }
 
   private static bufferToString(arrayBuffer: ArrayBuffer, tableViewFlag: boolean, tableCss: string) {
-    var { data: array, shape: arrayShape, order: order } = fromArrayBuffer(arrayBuffer);
-
+    var { data: array, shape: arrayShape, order: order, decr: arrDecr } = fromArrayBuffer(arrayBuffer);
+    if (arrDecr.startsWith('float')) array = setPrecision(array);
     if (tableViewFlag && arrayShape.length > 2) {
       return {content: `<div>Table view just support 1D or 2D array now</div>`, shapeLength: 0};
     }
@@ -190,9 +190,8 @@ export class NumpyPreview extends Disposable {
     if (arrayShape.length > 1) {
       // For multi dim
       console.log('[*] Process to show structure');
-      let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration();
       if (order === 'F') {
-        if (config.get('vscode-numpy-viewer.fortran2CLikeOrder')) {
+        if (getOption('vscode-numpy-viewer.fortran2CLikeOrder')) {
           // Process to get C-like array
           // TODO: optim performance
           array = toCLikeArray(array, arrayShape);

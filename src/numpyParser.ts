@@ -7,6 +7,7 @@ import { BoolArray } from './type/boolArray';
 import { StringArray } from './type/stringArray';
 import { ObjectArray } from './type/objectArray';
 import { ComplexArray } from './type/complexArray';
+import { getOption } from './utils';
 
 var stringArrEleSize = -1;
 var bytesArrEleSize = -1;
@@ -148,7 +149,7 @@ export function fromArrayBuffer(buffer: ArrayBuffer) {
   }
 
   // Return object with same signature as NDArray expects: {data, shape}
-  return { data: data, shape: header.shape, order: order };
+  return { data: data, shape: header.shape, order: order, decr: td };
 }
 
 

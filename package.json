@@ -3,7 +3,7 @@
   "displayName": "vscode-numpy-viewer",
   "description": "Display (binary) .npy or .npz files in VSCode.",
   "publisher": "Percy",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.68.0"
@@ -91,8 +91,8 @@
           },
           "vscode-numpy-viewer.printPrecision": {
             "type": "integer",
-            "default": 6,
-            "description": "Set the print precision for the numbers in array."
+            "default": -1,
+            "description": "Set the print precision for the numbers in array. (-1 means no limit)"
           }
         }
       }

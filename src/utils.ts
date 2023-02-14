@@ -145,7 +145,7 @@ export function toMultiDimArray(array: any, shape: any) {
         for (var i = 0; i < pieceNum; i++) {
             const begin = i * pieceSize;
             const end = array.length - (pieceNum - i - 1) * pieceSize;
-            if (pieceSize != 1) {
+            if (pieceSize !== 1) {
                 res[i] = toMultiDimArray(array.slice(begin, end), shape.slice(1, shape.length));
             } else {
                 res[i] = new Array([toMultiDimArray(array.slice(begin, end), shape.slice(1, shape.length))]);
@@ -161,4 +161,16 @@ export function toMultiDimArray(array: any, shape: any) {
 
 export function isLargerThanOne(element: any, index: any, array: any) {
     return element > 1;
+}
+
+export function getOption(option: string) {
+    let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration();
+    return config.get(option);
+}
+
+export function setPrecision(data: any) {
+    data = data as Float32Array | Float64Array;
+    let precision : number = getOption('vscode-numpy-viewer.printPrecision') as number;
+    if (precision > 0) for (var i = 0; i < data.length; i++) data[i] = parseFloat(data[i].toFixed(precision));
+    return data;
 }

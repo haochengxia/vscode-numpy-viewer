@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.7 (2023/02/14)
+
+- Feat: precision option.
+
 ## 0.1.6 (2023/01/06)
 
 - Fix: badges error.
