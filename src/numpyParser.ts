@@ -237,3 +237,10 @@ function typedArrayConstructorForDescription(dtypeDescription: string) {
       throw new Error('Unknown or not yet implemented numpy dtype description: ' + dtypeDescription);
   }
 }
+
+export function getFileSize(path: string) {
+  const stats = fs.statSync(path);
+  const fileSizeInBytes = stats.size;
+  const fileSizeInMegabytes = fileSizeInBytes / (1024 * 1024); 
+  return fileSizeInMegabytes;
+}

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { fromArrayBuffer, loadArrayBuffer, loadBuffer } from './numpyParser';
+import { fromArrayBuffer, loadArrayBuffer, loadBuffer, getFileSize } from './numpyParser';
 import { Disposable } from './disposable';
 import { OSUtils, toCLikeArray, toMultiDimArray, show2DArr, multiArrayToString, wrapWithSqBr, contentFormatting, getOption, setPrecision } from './utils';
 
@@ -103,6 +103,11 @@ export class NumpyPreview extends Disposable {
         break;
       default:
         console.log('[+] NOT Windows', path);
+    }
+    // Catch large file
+    if (getFileSize(path) > 50) {
+      vscode.window.showInformationMessage("File too large (> 50MB)");
+      return 'File too large (> 50MB), another extension <a href="https://marketplace.visualstudio.com/items?itemName=Percy.vscode-pydata-viewer" target="_blank">vscode-pydata-viewer</a>  may be helpful.';
     }
     if (path.endsWith('npz')) {
       // Solve .npz file
