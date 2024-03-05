@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { fromArrayBuffer, loadArrayBuffer, loadBuffer, getFileSize } from './numpyParser';
 import { Disposable } from './disposable';
 import { OSUtils, toCLikeArray, toMultiDimArray, show2DArr, multiArrayToString, wrapWithSqBr, contentFormatting, getOption, setPrecision } from './utils';
+import { updateStatusBarText } from './extension';
 
 type PreviewState = 'Disposed' | 'Visible' | 'Active';
 
@@ -69,9 +70,16 @@ export class NumpyPreview extends Disposable {
         }
       })
     );
+    let promiseString: Promise<string> = NumpyPreview.getWebviewContents(this.resource.path, false);
+    promiseString.then((stringValue) => {
+      this.webviewEditor.webview.html = stringValue;
+      this.update();
+    });
+    let shapeString: Promise<string> = NumpyPreview.getWebviewContents(this.resource.path, false, '', true);
+    shapeString.then((stringValue) => {
+      updateStatusBarText(stringValue);
+    });
     
-    this.webviewEditor.webview.html = NumpyPreview.getWebviewContents(this.resource.path, false);
-    this.update();
   }
 
   private reload(): void {
@@ -92,7 +100,7 @@ export class NumpyPreview extends Disposable {
     this._previewState = 'Visible';
   }
 
-  public static getWebviewContents(resourcePath: string, tableViewFlag: boolean, tableCss = '', shapeFlag=false): string {
+  public  static async getWebviewContents(resourcePath: string, tableViewFlag: boolean, tableCss = '', shapeFlag=false): Promise<string> {
     var content: string = '';
     var shape: string = '';
     var path = resourcePath;
@@ -145,9 +153,10 @@ export class NumpyPreview extends Disposable {
         temp_content = contentFormatting(temp_content, sl);
       }
       content = temp_content;
-      shape += `(${fromArrayBuffer(arrayBuffer).shape}) `
+      shape += `(${fromArrayBuffer(arrayBuffer).shape}) `;
     }
 
+    console.log(`[+] Shape is: ${shape}.`);
     if (shapeFlag) {
       return shape;
     }

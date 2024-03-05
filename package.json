@@ -54,6 +54,11 @@
           "light": "./images/shape-light.svg",
           "dark": "./images/shape-dark.svg"
         }
+      },
+      {
+        "command": "numpy-viewer.showArrayShapeOnBar",
+        "title": "Show Array Shape on the Status Bar",
+        "category": "NumpyViewer"
       }
     ],
     "menus": {

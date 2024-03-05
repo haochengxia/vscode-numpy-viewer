@@ -3,7 +3,14 @@ import { NumpyPreview } from './numpyPreview';
 import { NumpyCustomProvider } from './numpyProvider';
 import { getResourcePath } from './utils';
 
+let myStatusBarItem : any;
+
 export function activate(context: vscode.ExtensionContext) {
+	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+	myStatusBarItem.text = "Loading...";
+    myStatusBarItem.show();
+	context.subscriptions.push(myStatusBarItem);
+
 	const extensionRoot = vscode.Uri.file(context.extensionPath);
 	// Then register our provider
 	const provider = new NumpyCustomProvider(extensionRoot);
@@ -20,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 		)
 	);
 
-	function openTableView(uri?: vscode.Uri) {
+	async function openTableView(uri?: vscode.Uri) {
 		const panel = vscode.window.createWebviewPanel(
 			'openWebview', // Identifies the type of the webview. Used internally
 			'Table View', // Title of the panel displayed to the user
@@ -30,10 +37,10 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		);
 		const _getResourcePath = getResourcePath.bind(undefined, panel.webview, context);
-		let tableCss = _getResourcePath('web/styles/table.css')
+		let tableCss = _getResourcePath('web/styles/table.css');
 		var HTML = '';
 		if (uri instanceof vscode.Uri) {
-			HTML = NumpyPreview.getWebviewContents(uri.path, true, tableCss);
+			HTML = await NumpyPreview.getWebviewContents(uri.path, true, tableCss);
 		}
 		// console.log(HTML);
 		panel.webview.html = HTML;
@@ -42,18 +49,27 @@ export function activate(context: vscode.ExtensionContext) {
 	const tableViewCommmand = vscode.commands.registerCommand('numpy-viewer.openTableView', openTableView,);
 	context.subscriptions.push(tableViewCommmand,);
 
-
-	function showArrayShape(uri?: vscode.Uri) {
-		var shape_info = '';
+	async function showArrayShape(uri?: vscode.Uri) {
+		var shapeInfo = 'unavailable';
 		if (uri instanceof vscode.Uri) {
-			shape_info = NumpyPreview.getWebviewContents(uri.path, true, '', true);
-		}
-		vscode.window.showInformationMessage(`Shape info: ${shape_info}`);
+			shapeInfo = await NumpyPreview.getWebviewContents(uri.path, true, '', true);
+		} 
+		myStatusBarItem.text = shapeInfo;
+		vscode.window.showInformationMessage(`Shape info: ${shapeInfo}`);
 	}
+	
 
 	const arrayShapeCommmand = vscode.commands.registerCommand('numpy-viewer.showArrayShape', showArrayShape,);
 	context.subscriptions.push(arrayShapeCommmand,);
 }
 
+
+
+export function updateStatusBarText(text: String) {
+    if (myStatusBarItem) {
+        myStatusBarItem.text = text;
+    }
+}
+
 // this method is called when your extension is deactivated
-export function deactivate(): void { }
+export function deactivate(): void {}
