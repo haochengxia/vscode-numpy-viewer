@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.8 (2023/11/20)
+
+- Chore: repackage.
+
 ## 0.1.7 (2023/02/14)
 
 - Add precision option.
