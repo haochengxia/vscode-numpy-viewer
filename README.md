@@ -38,7 +38,7 @@ Refer: [numpy/typing/tests/data/pass/scalars.py](https://github.com/numpy/numpy/
 | ✅ | int16 | numpy.signedinteger[numpy._typing._16Bit] | i2 |
 | ✅ | int32 | numpy.signedinteger[numpy._typing._32Bit] | i4 |
 | ✅ | int64 | numpy.signedinteger[numpy._typing._64Bit] | i8 |
-|  | float16 | numpy.floating[numpy._typing._16Bit] | f2 |
+| ✅ | float16 | numpy.floating[numpy._typing._16Bit] | f2 |
 | ✅ | float32 | numpy.floating[numpy._typing._32Bit] | f4 |
 | ✅ | **float64** | numpy.floating[numpy._typing._64Bit] | f8 |
 | | float128 | numpy.floating[numpy._typing._128Bit] | f16 |
