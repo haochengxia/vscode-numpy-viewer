@@ -1,10 +1,12 @@
 # Numpy file viewer
 
 [![Version](https://img.shields.io/visual-studio-marketplace/v/Percy.vscode-numpy-viewer?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=Percy.vscode-numpy-viewer)
-[![Downloads](https://img.shields.io/visual-studio-marketplace/d/Percy.vscode-numpy-viewer?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=Percy.vscode-numpy-viewer)
 [![Installs](https://img.shields.io/visual-studio-marketplace/i/Percy.vscode-numpy-viewer?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=Percy.vscode-numpy-viewer)
-[![Rating](https://img.shields.io/visual-studio-marketplace/r/Percy.vscode-numpy-viewer?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=Percy.vscode-numpy-viewer)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![Build and Test](https://github.com/haochengxia/vscode-numpy-viewer/workflows/Build%20&%20Test/badge.svg)](https://github.com/haochengxia/vscode-numpy-viewer/actions/workflows/build-and-test.yml)
+
+<!-- [![Downloads](https://img.shields.io/visual-studio-marketplace/d/Percy.vscode-numpy-viewer?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=Percy.vscode-numpy-viewer) -->
+<!-- [![Rating](https://img.shields.io/visual-studio-marketplace/r/Percy.vscode-numpy-viewer?style=flat-square&token=)](https://marketplace.visualstudio.com/items?itemName=Percy.vscode-numpy-viewer) -->
 
 > ! Displaying very large arrays (e.g., size > 10,000,000) is not currently supported.
 
