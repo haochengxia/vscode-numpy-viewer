@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.9 (2025/03/21)
+
+- Add support for fp16.
+
 ## 0.1.8 (2023/11/20)
 
 - Chore: repackage.

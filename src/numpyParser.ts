@@ -144,9 +144,14 @@ export function fromArrayBuffer(buffer: ArrayBuffer) {
       var objectArray = new ObjectArray(buffer, reader.offset);
       data = objectArray.data;
       break;
+    case 'float16':
+      var fp16Array = new Float16Array(buffer, reader.offset);
+      data = fp16Array.data;
+      break;
     default:
       data = new ctor(buffer, reader.offset);
   }
+  // console.log('[+] Data has been loaded successfully', data);
 
   // Return object with same signature as NDArray expects: {data, shape}
   return { data: data, shape: header.shape, order: order, decr: td };
@@ -207,7 +212,7 @@ function typedArrayConstructorForDescription(dtypeDescription: string) {
 
     // Floating
     case '<f2': // "half"
-      throw new Error('Because JavaScript doesn\'t currently include standard support for 16-bit floating point values, support for this dtype is not yet implemented.');
+      return {constructor: Float16Array, typeDesc: 'float16'};
     case '<f4': // "single"
       return {constructor: Float32Array, typeDesc: 'float32'};
     case '<f8': // "double" "longfloat"
@@ -243,4 +248,57 @@ export function getFileSize(path: string) {
   const fileSizeInBytes = stats.size;
   const fileSizeInMegabytes = fileSizeInBytes / (1024 * 1024); 
   return fileSizeInMegabytes;
+}
+
+/* FP16  experimental feature */
+function convertFloat16ToNumber(buffer: DataView, offset: number, littleEndian: boolean = true): number {
+  const uint16 = buffer.getUint16(offset, littleEndian);
+  
+  const sign = (uint16 & 0x8000) >> 15;
+  const exponent = (uint16 & 0x7C00) >> 10;
+  const fraction = uint16 & 0x03FF;
+
+  if (exponent === 0) {
+    return (sign ? -1 : 1) * Math.pow(2, -14) * (fraction / 0x0400);
+  } else if (exponent === 0x1F) {
+    return fraction ? NaN : ((sign ? -1 : 1) * Infinity);
+  }
+
+  return (sign ? -1 : 1) * Math.pow(2, exponent - 15) * (1 + fraction / 0x0400);
+}
+
+class Float16Array implements RelativeIndexable<number>{
+  private buffer: ArrayBuffer;
+  private view: DataView;
+  public length: number;
+  public data: Array<number> = [];
+
+  constructor(buffer: ArrayBuffer, byteOffset: number = 0) {
+    this.buffer = buffer;
+    this.view = new DataView(buffer, byteOffset);
+    this.length = (buffer.byteLength - byteOffset) / 2;
+    
+    this.data = new Array(this.length);
+    for (let i = 0; i < this.length; i++) {
+      this.data[i] = this.get(i);
+      // console.log("fp16 construction", this.data[i]);
+    }
+  }
+
+  get(index: number): number {
+    return convertFloat16ToNumber(this.view, index * 2);
+  }
+
+  at(index: number): number | undefined {
+    if (index < 0 || index >= this.data.length) {
+        new Error('Out of range');
+    }
+    return this.data[index];
+  }
+
+  // *[Symbol.iterator]() {
+  //   for (let i = 0; i < this.length; i++) {
+  //     yield this.get(i);
+  //   }
+  // }
 }
