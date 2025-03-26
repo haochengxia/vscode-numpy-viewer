@@ -23,3 +23,7 @@ src/
 .gitignore
 jest.config.js
 *.txt
+example/
+
+# Do NOT exclude the following
+!node_modules/adm-zip/**
