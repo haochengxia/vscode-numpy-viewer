@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.10 (2025/03/25)
+
+- Fix: dependency error for adm-zip. 
+
 ## 0.1.9 (2025/03/21)
 
 - Add support for fp16.
