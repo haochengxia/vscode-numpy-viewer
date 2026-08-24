@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.11 (2026/08/23)
+
+- Add support for `.safetensors` files.
+- Security: escape untrusted array values, archive entry names, and tensor names before rendering them in a WebView.
+- Security: disable WebView scripting and add a restrictive Content Security Policy.
+- Add cross-platform CI, VSIX packaging, and tag-triggered releases.
+- Thanks to [@NickDrew](https://github.com/NickDrew) for responsibly reporting the WebView injection issue in [#30](https://github.com/haochengxia/vscode-numpy-viewer/issues/30).
+
 ## 0.1.10 (2025/03/25)
 
 - Fix: dependency error for adm-zip. 
