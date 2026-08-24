@@ -122,7 +122,9 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "jest"
+    "test": "jest",
+    "package:vsix": "vsce package",
+    "publish:marketplace": "vsce publish"
   },
   "jest": {
     "globals": {
@@ -162,14 +164,13 @@
   "devDependencies": {
     "@swc/core": "^1.2.183",
     "@swc/jest": "^0.2.21",
+    "@vscode/vsce": "^3.9.2",
     "@types/cli-table": "^0.3.0",
     "@types/debounce": "^3.0.0",
     "@types/fb-watchman": "^2.0.0",
     "@types/fs-extra": "^9.0.6",
-    "@types/glob": "^7.2.0",
     "@types/jest": "^27.0.3",
     "@types/marked": "^4.0.1",
-    "@types/minimatch": "^3.0.3",
     "@types/mkdirp": "^1.0.1",
     "@types/node": "16.x",
     "@types/semver": "^7.3.4",

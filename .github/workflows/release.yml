@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - name: Validate tag and package version
+        shell: bash
+        run: |
+          package_version="$(node -p "require('./package.json').version")"
+          expected_tag="v${package_version}"
+          if [[ "${GITHUB_REF_NAME}" != "${expected_tag}" ]]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match package.json version ${package_version}." >&2
+            exit 1
+          fi
+          echo "VSIX_PATH=vscode-numpy-viewer-${package_version}.vsix" >> "${GITHUB_ENV}"
+
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+
+      - name: Compile, lint, and test
+        run: npm test -- --runInBand
+
+      - name: Package extension
+        run: npm run package:vsix -- --out "${VSIX_PATH}"
+
+      - name: Publish to Visual Studio Marketplace
+        if: env.VSCE_PAT != ''
+        run: npm run publish:marketplace -- --packagePath "${VSIX_PATH}" --skip-duplicate
+
+      - name: Marketplace publishing not configured
+        if: env.VSCE_PAT == ''
+        run: echo "::notice::VSCE_PAT is not configured; creating only the GitHub release."
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${GITHUB_REF_NAME}" "${VSIX_PATH}#Installable VSIX" --verify-tag --generate-notes
