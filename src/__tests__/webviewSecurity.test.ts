@@ -45,7 +45,9 @@ describe('WebView HTML security', () => {
   });
 
   afterEach(() => {
-    fs.rmSync(tempDirectory, { recursive: true, force: true });
+    if (tempDirectory) {
+      fs.rmSync(tempDirectory, { recursive: true, force: true });
+    }
   });
 
   it('renders a script stored in an npy byte string as text', async () => {
