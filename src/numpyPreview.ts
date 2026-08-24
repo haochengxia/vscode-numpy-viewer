@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { fromArrayBuffer, loadArrayBuffer, loadBuffer, getFileSize } from './numpyParser';
 import * as safetensors from './safetensorsParser';
 import { Disposable } from './disposable';
+import { arrayValuesToHtml, escapeHtml } from './html';
 import { OSUtils, toCLikeArray, toMultiDimArray, show2DArr, multiArrayToString, wrapWithSqBr, contentFormatting, getOption, setPrecision } from './utils';
 import { updateStatusBarText } from './extension';
 
@@ -22,7 +23,7 @@ export class NumpyPreview extends Disposable {
     });
 
     webviewEditor.webview.options = {
-      enableScripts: true,
+      enableScripts: false,
       localResourceRoots: [resourceRoot, extensionRoot],
     };
 
@@ -71,7 +72,13 @@ export class NumpyPreview extends Disposable {
         }
       })
     );
-    let promiseString: Promise<string> = NumpyPreview.getWebviewContents(this.resource.path, false);
+    let promiseString: Promise<string> = NumpyPreview.getWebviewContents(
+      this.resource.path,
+      false,
+      '',
+      false,
+      this.webviewEditor.webview.cspSource
+    );
     promiseString.then((stringValue) => {
       this.webviewEditor.webview.html = stringValue;
       this.update();
@@ -101,7 +108,13 @@ export class NumpyPreview extends Disposable {
     this._previewState = 'Visible';
   }
 
-  public  static async getWebviewContents(resourcePath: string, tableViewFlag: boolean, tableCss = '', shapeFlag=false): Promise<string> {
+  public static async getWebviewContents(
+    resourcePath: string,
+    tableViewFlag: boolean,
+    tableCss = '',
+    shapeFlag = false,
+    cspSource = ''
+  ): Promise<string> {
     var content: string = '';
     var shape: string = '';
     var path = resourcePath;
@@ -137,7 +150,7 @@ export class NumpyPreview extends Disposable {
       });
       var contents: Array<string> = [];
       for (var i = 0; i < zipEntries.length; i++) {
-        contents.push(names[i]);
+        contents.push(escapeHtml(names[i]));
         var {content: tempContent, shapeLength: sl}=  this.bufferToString(buffers[i], tableViewFlag, tableCss);
         if (sl >= 2) {
           tempContent = contentFormatting(tempContent, sl);
@@ -151,7 +164,7 @@ export class NumpyPreview extends Disposable {
         const tensors: {[key: string]: {data: DataView, shape: number[], dtype: string}} = safetensors.fromArrayBuffer(arrayBuffer);
         var contents: Array<string> = [];
         for (const key in tensors) {
-            contents.push(key);
+            contents.push(escapeHtml(key));
             const { data, shape, dtype } = tensors[key];
             let {content: tempContent, shapeLength: sl}=  this.safetensorsToString({data, shape, dtype}, tableViewFlag, tableCss);
             if (sl >= 2) {
@@ -179,7 +192,7 @@ export class NumpyPreview extends Disposable {
     // Introduce css file
     var resourceLink = '';
     if (tableCss !== '') {
-      resourceLink = `<link rel="stylesheet" href="${tableCss}">`;
+      resourceLink = `<link rel="stylesheet" href="${escapeHtml(tableCss)}">`;
     }
 
     // Replace , with ,\n for reading
@@ -189,6 +202,7 @@ export class NumpyPreview extends Disposable {
     <html dir="ltr" mozdisallowselectionprint>
     <head>
     <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src ${cspSource} 'unsafe-inline'; base-uri 'none'; form-action 'none';">
     ${resourceLink}
     </head>`;
     const tail = ['</html>'].join('\n');
@@ -276,7 +290,7 @@ export class NumpyPreview extends Disposable {
     console.log('[+] Safetensors array shape is', shape);
 
     if (shape.length === 0) {
-      return {content: array.toString(), shapeLength: shape.length};
+      return {content: arrayValuesToHtml(array), shapeLength: shape.length};
     }
 
     if (shape.length > 1) {
@@ -302,7 +316,7 @@ export class NumpyPreview extends Disposable {
         var multiArr = toMultiDimArray(array, [shape[0], 1]);
         content = show2DArr(multiArr);
       } else {
-        content = wrapWithSqBr(array.toString());
+        content = wrapWithSqBr(arrayValuesToHtml(array));
       }
     }
     
@@ -348,7 +362,7 @@ export class NumpyPreview extends Disposable {
     console.log('[+] Array shape is', arrayShape);
 
     if (arrayShape.length === 0) {
-      return {content: array.toString(), shapeLength: arrayShape.length};
+      return {content: arrayValuesToHtml(array), shapeLength: arrayShape.length};
     }
 
     if (arrayShape.length > 1) {
@@ -388,7 +402,7 @@ export class NumpyPreview extends Disposable {
         var multiArr = toMultiDimArray(array, [arrayShape[0], 1]);
         content = show2DArr(multiArr);
       } else {
-        content = wrapWithSqBr(array.toString());
+        content = wrapWithSqBr(arrayValuesToHtml(array));
       }
     }
 

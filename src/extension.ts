@@ -32,15 +32,15 @@ export function activate(context: vscode.ExtensionContext) {
 			'openWebview', // Identifies the type of the webview. Used internally
 			'Table View', // Title of the panel displayed to the user
 			vscode.ViewColumn.One, // Editor column to show the new webview panel in.
-			{ // Enable scripts in the webview
-				enableScripts: true //Set this to true if you want to enable Javascript. 
+			{
+				enableScripts: false
 			}
 		);
 		const _getResourcePath = getResourcePath.bind(undefined, panel.webview, context);
 		let tableCss = _getResourcePath('web/styles/table.css');
 		var HTML = '';
 		if (uri instanceof vscode.Uri) {
-			HTML = await NumpyPreview.getWebviewContents(uri.path, true, tableCss);
+			HTML = await NumpyPreview.getWebviewContents(uri.path, true, tableCss, false, panel.webview.cspSource);
 		}
 		// console.log(HTML);
 		panel.webview.html = HTML;

@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 
+import { arrayValuesToHtml, escapeHtml } from './html';
+
 const os = require('os');
 
 const LOCAL_OS_TYPE = os.type();
@@ -73,10 +75,10 @@ export function multiArrayToString(array: any, shape: number[]) {
         for (var i = 0; i < pieceNum; i++) {
             res[i] = multiArrayToString(array[i], shape.slice(1, shape.length));
         }
-        return wrapWithSqBr(res.toString());
+        return wrapWithSqBr(res.join(','));
     }
     else {
-        return wrapWithSqBr(array.toString());
+        return wrapWithSqBr(arrayValuesToHtml(array));
     }
 }
 
@@ -115,7 +117,7 @@ export function makeTableHTML(myArray: any, style = 'fixed_headers') {
     for (var i = 0; i < rowNum; i++) {
         var currentRow = `<td>row ${i.toString()}</td>`; // Add row ID
         for (var j = 0; j < myArray[i].length; j++) {
-            currentRow += `<td>${myArray[i][j].toString()}</td>`;
+            currentRow += `<td>${escapeHtml(myArray[i][j])}</td>`;
         }
         rowContent += `<tr>${currentRow}</tr>`;
     }
