@@ -14,6 +14,12 @@ Display (binary) `.npy` or `.npz` files in VSCode.
 
 ![img](https://github.com/haochengxia/vscode-numpy-viewer/blob/screenshot/screenshot.gif?raw=true)
 
+## Security and safety
+
+This extension treats array values, archive entry names, and tensor names as untrusted data. Content displayed in a WebView is HTML-escaped, WebView scripting is disabled, and a restrictive Content Security Policy is applied to reduce the risk of markup or script injection. Serialized Python objects are not executed by the viewer.
+
+These protections reduce known risks but are not a guarantee that every malformed or malicious file is safe to open. Keep the extension updated and use additional caution with files from untrusted sources. Please report suspected security vulnerabilities through the repository's GitHub issue tracker without including sensitive information or working exploit details.
+
 ## Change log
 
 Please refer to [CHANGELOG.md](./CHANGELOG.md).
